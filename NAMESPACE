@@ -1,0 +1,5 @@
+useDynLib(n2knn)
+import(Rcpp)
+export(checkOpenMP)
+export(n2Knn)
+export(n2CrossKnn)
