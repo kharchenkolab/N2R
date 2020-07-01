@@ -5,7 +5,7 @@
 #' 
 #' @export
 checkOpenMP <- function() {
-    .Call('_n2Knn_checkOpenMP', PACKAGE = 'n2Knn')
+    .Call('_n2R_checkOpenMP', PACKAGE = 'n2R')
 }
 
 #' k-nn using n2 (approximate nearest neighbor)
@@ -21,7 +21,7 @@ checkOpenMP <- function() {
 #' @param quiet boolean (default=FALSE)
 #' @export
 n2Knn <- function(m, k, nThreads = 10L, verbose = TRUE, indexType = "angular", M = 12L, MaxM0 = 24L, ef_search_multiplier = 50, quiet = FALSE) {
-    .Call('_n2Knn_n2Knn', PACKAGE = 'n2Knn', m, k, nThreads, verbose, indexType, M, MaxM0, ef_search_multiplier, quiet)
+    .Call('_n2R_n2Knn', PACKAGE = 'n2R', m, k, nThreads, verbose, indexType, M, MaxM0, ef_search_multiplier, quiet)
 }
 
 #' find NN of A in B
@@ -38,6 +38,6 @@ n2Knn <- function(m, k, nThreads = 10L, verbose = TRUE, indexType = "angular", M
 #' @param quiet boolean (default=FALSE)
 #' @export
 n2CrossKnn <- function(mA, mB, k, nThreads = 10L, verbose = TRUE, indexType = "angular", M = 12L, MaxM0 = 24L, ef_search_multiplier = 50, quiet = FALSE) {
-    .Call('_n2Knn_n2CrossKnn', PACKAGE = 'n2Knn', mA, mB, k, nThreads, verbose, indexType, M, MaxM0, ef_search_multiplier, quiet)
+    .Call('_n2R_n2CrossKnn', PACKAGE = 'n2R', mA, mB, k, nThreads, verbose, indexType, M, MaxM0, ef_search_multiplier, quiet)
 }
 
