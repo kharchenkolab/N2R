@@ -1,5 +1,6 @@
 useDynLib(n2R)
 import(Rcpp)
+import(Matrix)
 export(checkOpenMP)
 export(n2Knn)
 export(n2CrossKnn)
