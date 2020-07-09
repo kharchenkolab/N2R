@@ -8,7 +8,7 @@ using namespace Rcpp;
 
 // checkOpenMP
 bool checkOpenMP();
-RcppExport SEXP _n2R_checkOpenMP() {
+RcppExport SEXP _N2R_checkOpenMP() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -18,7 +18,7 @@ END_RCPP
 }
 // n2Knn
 Eigen::SparseMatrix<double> n2Knn(const NumericMatrix& m, int k, int nThreads, bool verbose, std::string indexType, int M, int MaxM0, float ef_search_multiplier, bool quiet);
-RcppExport SEXP _n2R_n2Knn(SEXP mSEXP, SEXP kSEXP, SEXP nThreadsSEXP, SEXP verboseSEXP, SEXP indexTypeSEXP, SEXP MSEXP, SEXP MaxM0SEXP, SEXP ef_search_multiplierSEXP, SEXP quietSEXP) {
+RcppExport SEXP _N2R_n2Knn(SEXP mSEXP, SEXP kSEXP, SEXP nThreadsSEXP, SEXP verboseSEXP, SEXP indexTypeSEXP, SEXP MSEXP, SEXP MaxM0SEXP, SEXP ef_search_multiplierSEXP, SEXP quietSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -37,7 +37,7 @@ END_RCPP
 }
 // n2CrossKnn
 Eigen::SparseMatrix<double> n2CrossKnn(const NumericMatrix& mA, const NumericMatrix& mB, int k, int nThreads, bool verbose, std::string indexType, int M, int MaxM0, float ef_search_multiplier, bool quiet);
-RcppExport SEXP _n2R_n2CrossKnn(SEXP mASEXP, SEXP mBSEXP, SEXP kSEXP, SEXP nThreadsSEXP, SEXP verboseSEXP, SEXP indexTypeSEXP, SEXP MSEXP, SEXP MaxM0SEXP, SEXP ef_search_multiplierSEXP, SEXP quietSEXP) {
+RcppExport SEXP _N2R_n2CrossKnn(SEXP mASEXP, SEXP mBSEXP, SEXP kSEXP, SEXP nThreadsSEXP, SEXP verboseSEXP, SEXP indexTypeSEXP, SEXP MSEXP, SEXP MaxM0SEXP, SEXP ef_search_multiplierSEXP, SEXP quietSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -57,13 +57,13 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_n2R_checkOpenMP", (DL_FUNC) &_n2R_checkOpenMP, 0},
-    {"_n2R_n2Knn", (DL_FUNC) &_n2R_n2Knn, 9},
-    {"_n2R_n2CrossKnn", (DL_FUNC) &_n2R_n2CrossKnn, 10},
+    {"_N2R_checkOpenMP", (DL_FUNC) &_N2R_checkOpenMP, 0},
+    {"_N2R_n2Knn", (DL_FUNC) &_N2R_n2Knn, 9},
+    {"_N2R_n2CrossKnn", (DL_FUNC) &_N2R_n2CrossKnn, 10},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_n2R(DllInfo *dll) {
+RcppExport void R_init_N2R(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

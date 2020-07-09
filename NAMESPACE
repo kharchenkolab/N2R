@@ -1,4 +1,4 @@
-useDynLib(n2R)
+useDynLib(N2R)
 import(Rcpp)
 import(Matrix)
 export(checkOpenMP)
