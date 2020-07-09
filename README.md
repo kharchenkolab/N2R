@@ -1,4 +1,4 @@
-# n2R
+# N2R
 R extensions to n2 implementing kNN functions, from conos
 
 Newer version with Python and Go bindings here: https://github.com/kakao/n2
