@@ -6,10 +6,13 @@ Date: 2020-06-26
 Authors@R: c(person("Peter", "Kharchenko", email = "Peter_Kharchenko@hms.harvard.edu", role = c("aut")), person("Evan", "Biederstedt", email = "evan.biederstedt@gmail.com", role=c("cre", "aut")))
 Description: One paragraph description of what the package does as one
         or more full sentences.
-License: GPL (>= 2)
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
 Depends: Matrix
 Imports: Rcpp (>= 1.0.4)
 LinkingTo: Rcpp, RcppEigen
+SystemRequirements: GNUmake
 RoxygenNote: 7.1.1
 Author: Peter Kharchenko [aut], Evan Biederstedt [cre, aut]
 Maintainer: Evan Biederstedt <evan.biederstedt@gmail.com>

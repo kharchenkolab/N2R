@@ -10,11 +10,11 @@ checkOpenMP <- function() {
 
 #' k-nn using n2 (approximate nearest neighbor)
 #' 
-#' @param m matrix i.e. Rcpp::NumericMatrix
-#' @param k int
-#' @param nThreads integer (default=10)
-#' @param verbose boolean (default=FALSE)
-#' @param indexType string (default="angular")
+#' @param m matrix Matrix for clustering 
+#' @param k int Number of k for k-means clustering
+#' @param nThreads integer Number of threads (default=10)
+#' @param verbose boolean Output verbose messages (default=FALSE)
+#' @param indexType string Type of index (default="angular")
 #' @param M integer (default=12)
 #' @param MaxM0 integer (default=24)
 #' @param ef_search_multiplier numeric (default=50)
@@ -26,11 +26,11 @@ n2Knn <- function(m, k, nThreads = 10L, verbose = TRUE, indexType = "angular", M
 
 #' find NN of A in B
 #'
-#' @param mA matrix i.e. Rcpp::NumericMatrix
-#' @param mB matrix i.e. Rcpp::NumericMatrix
-#' @param k int
-#' @param nThreads integer (default=10)
-#' @param verbose boolean (default=FALSE)
+#' @param mA matrix First matrix for clustering, mA in mB 
+#' @param mB matrix Second matrix for clustering, mA in mB 
+#' @param k int Number of k for k-means clustering
+#' @param nThreads integer  Number of threads (default=10)
+#' @param verbose boolean Output verbose messages (default=FALSE)
 #' @param indexType string (default="angular")
 #' @param M integer (default=12)
 #' @param MaxM0 integer (default=24)

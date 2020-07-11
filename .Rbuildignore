@@ -1,0 +1,9 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+.travis.yml
+CHANGELOG.md
+^LICENSE\.md$
+.git  
+.DS_Store
+..Rcheck
+N2R.Rcheck
