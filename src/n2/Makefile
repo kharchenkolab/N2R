@@ -1,9 +1,9 @@
-CXX ?= g++
-PKG_CPPFLAGS := $(PKG_CPPFLAGS) -O3 -march=native -std=c++11 -pthread -fPIC -fopenmp -Wno-deprecated
-PKG_CXXFLAGS += -I"./include"
-LDFLAGS += -lpthread
 
-LIB := ../libn2.a
+PKG_CPPFLAGS = -O3 -march=native -std=c++11 -pthread -fPIC -fopenmp -Wno-deprecated
+PKG_CXXFLAGS = -I"./include"
+LDFLAGS = -lpthread
+
+LIB = ../libn2.a
 lib: $(LIB)
 
 $(LIB): base.o hnsw.o hnsw_node.o distance.o heuristic.o mmap.o
