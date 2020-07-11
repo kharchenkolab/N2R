@@ -11,3 +11,5 @@ Depends: Matrix
 Imports: Rcpp (>= 1.0.4)
 LinkingTo: Rcpp, RcppEigen
 RoxygenNote: 7.1.1
+Author: Peter Kharchenko [aut], Evan Biederstedt [cre, aut]
+Maintainer: Evan Biederstedt <evan.biederstedt@gmail.com>

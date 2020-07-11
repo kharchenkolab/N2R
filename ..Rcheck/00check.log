@@ -1,0 +1,9 @@
+* using log directory ‘/Users/evanbiederstedt/n2R/..Rcheck’
+* using R version 4.0.2 (2020-06-22)
+* using platform: x86_64-apple-darwin17.0 (64-bit)
+* using session charset: UTF-8
+* checking for file ‘./DESCRIPTION’ ... ERROR
+Required fields missing or empty:
+  ‘Author’ ‘Maintainer’
+* DONE
+Status: 1 ERROR
