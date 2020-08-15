@@ -21,17 +21,20 @@ using namespace Rcpp;
 #define INDEX_TYPE_COSINE 2
 #define INDEX_TYPE_LP 3
 
-//' k-nn using n2 (approximate nearest neighbor)
-//' 
-//' @param m matrix i.e. Rcpp::NumericMatrix
-//' @param k int
-//' @param nThreads integer (default=10)
-//' @param verbose boolean (default=FALSE)
-//' @param indexType string (default="angular")
+//' Perform fast approximate K-nearest neighbor search on input matrix. Algorithm based 
+//' on N2 implmenetation of an approximate nearest neighbor search using Hierarchical NSW graphs. 
+//' The original algorithm is described in "Efficient and Robust Approximate Nearest Neighbor 
+//' Search Using Hierarchical Navigable Small World Graphs", Y. Malkov and D. Yashunin, doi: 10.1109/TPAMI.2018.2889473
+//'
+//' @param m Input numeric matrix of data 
+//' @param k Integer number of clusters
+//' @param nThreads Integer number of threads (default=10)
+//' @param verbose Boolean flag for verbose output (default=FALSE)
+//' @param indexType Metric distance type, which can be "angular" or "L2" (default="angular")
 //' @param M integer (default=12)
 //' @param MaxM0 integer (default=24)
 //' @param ef_search_multiplier numeric (default=50)
-//' @param quiet boolean (default=FALSE)
+//' @param quiet Boolean flag specifically for Rcpp warnings (default=FALSE)
 //' @export
 // [[Rcpp::export]]
 Eigen::SparseMatrix<double> n2Knn(const NumericMatrix& m, int k, int nThreads=10, bool verbose=true, std::string indexType="angular", int M=12, int MaxM0=24, float ef_search_multiplier=50, bool quiet=false) {
@@ -91,14 +94,14 @@ Eigen::SparseMatrix<double> n2Knn(const NumericMatrix& m, int k, int nThreads=10
 //'
 //' @param mA matrix i.e. Rcpp::NumericMatrix
 //' @param mB matrix i.e. Rcpp::NumericMatrix
-//' @param k int
-//' @param nThreads integer (default=10)
-//' @param verbose boolean (default=FALSE)
-//' @param indexType string (default="angular")
+//' @param k Integer number of clusters
+//' @param nThreads Integer number of threads (default=10)
+//' @param verbose Boolean flag for verbose output (default=FALSE)
+//' @param indexType Metric distance type, which can be "angular" or "L2" (default="angular")
 //' @param M integer (default=12)
 //' @param MaxM0 integer (default=24)
 //' @param ef_search_multiplier numeric (default=50)
-//' @param quiet boolean (default=FALSE)
+//' @param quiet Boolean flag specifically for Rcpp warnings (default=FALSE)
 //' @export
 // [[Rcpp::export]]
 Eigen::SparseMatrix<double> n2CrossKnn(const NumericMatrix& mA, const NumericMatrix& mB, int k, int nThreads=10, bool verbose=true, std::string indexType="angular", int M=12, int MaxM0=24, float ef_search_multiplier=50, bool quiet=false) {
