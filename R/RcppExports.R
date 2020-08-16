@@ -8,7 +8,7 @@ checkOpenMP <- function() {
     .Call('_N2R_checkOpenMP', PACKAGE = 'N2R')
 }
 
-#' k-nn using n2 (approximate nearest neighbor)
+#' k-NN using n2 (using approximate nearest neighbor)
 #' 
 #' @param m matrix i.e. Rcpp::NumericMatrix
 #' @param k int

@@ -4,6 +4,9 @@ R extensions to n2 implementing kNN functions, from conos
 Newer version with Python and Go bindings here: https://github.com/kakao/n2
 (Note: both Python and Go extensions are quite different in design than this library.)
 
+* Rust library here: https://github.com/rust-cv/hnsw
+
+
 
 ## Functions
 
