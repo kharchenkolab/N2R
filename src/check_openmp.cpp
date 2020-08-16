@@ -5,7 +5,6 @@ using namespace Rcpp;
 
 //' boolean to check OpenMP exists
 //' 
-//' @export
 // [[Rcpp::export]]
 bool checkOpenMP() {
 #ifdef _OPENMP

@@ -15,11 +15,11 @@ NULL
 #' @param ef_search_multiplier Integer multiplier to calculate candidate nearest neighbors, set to k*ef_search_multiplier (default=50). Refer to the parameters er and efConstruction in Malkov & Yashunin (2020) doi: 10.1109/TPAMI.2018.2889473
 #' @param quiet Boolean flag specifically for Rcpp warnings (default=FALSE)
 #' @export
-kNN = function(m, k, nThreads = 10L, verbose=TRUE, indexType="angular", M=12L, MaxM0=24L, ef_search_multiplier=50, quiet=FALSE){
+Knn = function(m, k, nThreads = 10L, verbose=TRUE, indexType="angular", M=12L, MaxM0=24L, ef_search_multiplier=50, quiet=FALSE){
 	if (!is.character(indexType) || !(toupper(indexType) %in% c("ANGULAR", "L2")) ){
 		stop("The metric distance indexType must be either 'L2' or 'angular'")
 	}
-	return(n2Knn((m, k, nThreads = nThreads, verbose = verbose, indexType = indexType, M = M, MaxM0 = MaxM0, ef_search_multiplier = ef_search_multiplier , quiet = quiet))
+	return(n2Knn(m=m, k=k, nThreads=nThreads, verbose=verbose, indexType=indexType, M=M, MaxM0=MaxM0, ef_search_multiplier=ef_search_multiplier, quiet=quiet))
 
 }
 
@@ -41,5 +41,5 @@ crossKnn = function(mA, mB, k, nThreads = 10L, verbose=TRUE, indexType="angular"
 	if (!is.character(indexType) || !(toupper(indexType) %in% c("ANGULAR", "L2")) ){
 		stop("The metric distance indexType must be either 'L2' or 'angular'")
 	}
-	return(n2CrossKnn((m, k, nThreads = nThreads, verbose = verbose, indexType = indexType, M = M, MaxM0 = MaxM0, ef_search_multiplier = ef_search_multiplier , quiet = quiet))
+	return(n2CrossKnn(mA=mA, mB=mB, k=k, nThreads=nThreads, verbose=verbose, indexType=indexType, M=M, MaxM0=MaxM0, ef_search_multiplier=ef_search_multiplier, quiet=quiet))
 }

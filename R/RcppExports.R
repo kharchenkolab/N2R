@@ -3,40 +3,14 @@
 
 #' boolean to check OpenMP exists
 #' 
-#' @export
 checkOpenMP <- function() {
     .Call('_N2R_checkOpenMP', PACKAGE = 'N2R')
 }
 
-#' k-NN using n2 (using approximate nearest neighbor)
-#' 
-#' @param m matrix i.e. Rcpp::NumericMatrix
-#' @param k int
-#' @param nThreads integer (default=10)
-#' @param verbose boolean (default=FALSE)
-#' @param indexType string (default="angular")
-#' @param M integer (default=12)
-#' @param MaxM0 integer (default=24)
-#' @param ef_search_multiplier numeric (default=50)
-#' @param quiet boolean (default=FALSE)
-#' @export
 n2Knn <- function(m, k, nThreads = 10L, verbose = TRUE, indexType = "angular", M = 12L, MaxM0 = 24L, ef_search_multiplier = 50, quiet = FALSE) {
     .Call('_N2R_n2Knn', PACKAGE = 'N2R', m, k, nThreads, verbose, indexType, M, MaxM0, ef_search_multiplier, quiet)
 }
 
-#' find NN of A in B
-#'
-#' @param mA matrix i.e. Rcpp::NumericMatrix
-#' @param mB matrix i.e. Rcpp::NumericMatrix
-#' @param k int
-#' @param nThreads integer (default=10)
-#' @param verbose boolean (default=FALSE)
-#' @param indexType string (default="angular")
-#' @param M integer (default=12)
-#' @param MaxM0 integer (default=24)
-#' @param ef_search_multiplier numeric (default=50)
-#' @param quiet boolean (default=FALSE)
-#' @export
 n2CrossKnn <- function(mA, mB, k, nThreads = 10L, verbose = TRUE, indexType = "angular", M = 12L, MaxM0 = 24L, ef_search_multiplier = 50, quiet = FALSE) {
     .Call('_N2R_n2CrossKnn', PACKAGE = 'N2R', mA, mB, k, nThreads, verbose, indexType, M, MaxM0, ef_search_multiplier, quiet)
 }
