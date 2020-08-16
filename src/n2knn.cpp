@@ -21,10 +21,7 @@ using namespace Rcpp;
 #define INDEX_TYPE_COSINE 2
 #define INDEX_TYPE_LP 3
 
-//' Perform fast approximate K-nearest neighbor search on input matrix. Algorithm based 
-//' on N2 implmenetation of an approximate nearest neighbor search using Hierarchical NSW graphs. 
-//' The original algorithm is described in "Efficient and Robust Approximate Nearest Neighbor 
-//' Search Using Hierarchical Navigable Small World Graphs", Y. Malkov and D. Yashunin, doi: 10.1109/TPAMI.2018.2889473
+//' Perform fast approximate K-nearest neighbor search on input matrix m.
 //'
 //' @param m Input numeric matrix of data 
 //' @param k Integer number of clusters
@@ -90,11 +87,11 @@ Eigen::SparseMatrix<double> n2Knn(const NumericMatrix& m, int k, int nThreads=10
 };
 
 
-//' find NN of A in B
+//' Perform fast approximate K-nearest neighbor search of input matrix mA in matrix mB. 
 //'
-//' @param mA matrix i.e. Rcpp::NumericMatrix
-//' @param mB matrix i.e. Rcpp::NumericMatrix
-//' @param k Integer number of clusters
+//' @param mA Input numeric matrix of data 
+//' @param mB Input numeric matrix of data
+//' @param k Integer number of clusters, if k is equal to or greater than the number of rows for mB, it is set to one less than the number of rows for mB, mB.nrow()-1
 //' @param nThreads Integer number of threads (default=10)
 //' @param verbose Boolean flag for verbose output (default=FALSE)
 //' @param indexType Metric distance type, which can be "angular" or "L2" (default="angular")
