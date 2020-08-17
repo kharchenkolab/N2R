@@ -3,7 +3,7 @@
 #' @import Matrix
 NULL
 
-#' Perform fast approximate K-nearest neighbor search on input matrix m.
+#' Perform fast approximate K-nearest neighbor search on rows of the input matrix m.
 #' 
 #' @param m Input numeric matrix of data 
 #' @param k Integer number of clusters
@@ -24,7 +24,7 @@ Knn = function(m, k, nThreads = 10L, verbose=TRUE, indexType="angular", M=12L, M
 }
 
 
-#' Perform fast approximate K-nearest neighbor search of input matrix mA in matrix mB. 
+#' Perform fast approximate K-nearest neighbor search of rows input matrix mA in rows of matrix mB. 
 #' 
 #' @param mA Input numeric matrix of data 
 #' @param mB Input numeric matrix of data
