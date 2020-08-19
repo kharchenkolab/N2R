@@ -14,6 +14,13 @@ NULL
 #' @param MaxM0 Integer maximum number of connections that an element can have in the zero layer. (default=24) It is recommended that MaxM0 not exceed 2*M.
 #' @param ef_search_multiplier Integer multiplier to calculate candidate nearest neighbors, set to k*ef_search_multiplier (default=50). Refer to the parameters er and efConstruction in Malkov & Yashunin (2020) doi: 10.1109/TPAMI.2018.2889473
 #' @param quiet Boolean flag specifically for Rcpp warnings (default=FALSE)
+#' @return clusters per row in sparse Matrix of class "dgCMatrix" of dimensions m rows by m rows
+#'
+#' @examples
+#' data(iris)
+#' iris_df = data.matrix(iris[-5]) ## convert to a numeric matrix 
+#' Knn(iris_df, 4)
+#' 
 #' @export
 Knn = function(m, k, nThreads = 10L, verbose=TRUE, indexType="angular", M=12L, MaxM0=24L, ef_search_multiplier=50, quiet=FALSE){
 	if (!is.character(indexType) || !(toupper(indexType) %in% c("ANGULAR", "L2")) ){
@@ -36,6 +43,13 @@ Knn = function(m, k, nThreads = 10L, verbose=TRUE, indexType="angular", M=12L, M
 #' @param MaxM0 Integer maximum number of connections that an element can have in the zero layer. (default=24) It is recommended that MaxM0 not exceed 2*M.
 #' @param ef_search_multiplier Integer multiplier to calculate candidate nearest neighbors, set to k*ef_search_multiplier (default=50). Refer to the parameters er and efConstruction in Malkov & Yashunin (2020) doi: 10.1109/TPAMI.2018.2889473
 #' @param quiet Boolean flag specifically for Rcpp warnings (default=FALSE)
+#' @return clusters per row in sparse Matrix of class "dgCMatrix" of dimensions mB rows by mA rows
+#'
+#' @examples
+#' data(iris)
+#' iris_df = data.matrix(iris[-5]) ## convert to a numeric matrix 
+#' crossKnn(iris_df, head(iris_df, 50), 4)
+#' 
 #' @export
 crossKnn = function(mA, mB, k, nThreads = 10L, verbose=TRUE, indexType="angular", M=12L, MaxM0=24L, ef_search_multiplier=50, quiet=FALSE){
 	if (!is.character(indexType) || !(toupper(indexType) %in% c("ANGULAR", "L2")) ){

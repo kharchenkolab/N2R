@@ -2,7 +2,7 @@
 % Please edit documentation in R/imports.R
 \name{Knn}
 \alias{Knn}
-\title{Perform fast approximate K-nearest neighbor search on input matrix m.}
+\title{Perform fast approximate K-nearest neighbor search on rows of the input matrix m.}
 \usage{
 Knn(
   m,
@@ -35,6 +35,15 @@ Knn(
 
 \item{quiet}{Boolean flag specifically for Rcpp warnings (default=FALSE)}
 }
+\value{
+clusters per row in sparse Matrix of class "dgCMatrix" of dimensions m rows by m rows
+}
 \description{
-Perform fast approximate K-nearest neighbor search on input matrix m.
+Perform fast approximate K-nearest neighbor search on rows of the input matrix m.
+}
+\examples{
+data(iris)
+iris_df = data.matrix(iris[-5]) ## convert to a numeric matrix 
+Knn(iris_df, 4)
+
 }

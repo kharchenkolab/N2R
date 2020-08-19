@@ -2,7 +2,7 @@
 % Please edit documentation in R/imports.R
 \name{crossKnn}
 \alias{crossKnn}
-\title{Perform fast approximate K-nearest neighbor search of input matrix mA in matrix mB.}
+\title{Perform fast approximate K-nearest neighbor search of rows input matrix mA in rows of matrix mB.}
 \usage{
 crossKnn(
   mA,
@@ -38,6 +38,15 @@ crossKnn(
 
 \item{quiet}{Boolean flag specifically for Rcpp warnings (default=FALSE)}
 }
+\value{
+clusters per row in sparse Matrix of class "dgCMatrix" of dimensions mB rows by mA rows
+}
 \description{
-Perform fast approximate K-nearest neighbor search of input matrix mA in matrix mB.
+Perform fast approximate K-nearest neighbor search of rows input matrix mA in rows of matrix mB.
+}
+\examples{
+data(iris)
+iris_df = data.matrix(iris[-5]) ## convert to a numeric matrix 
+crossKnn(iris_df, head(iris_df, 50), 4)
+
 }
