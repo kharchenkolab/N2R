@@ -19,7 +19,7 @@ NULL
 #' @examples
 #' data(iris)
 #' iris_df = data.matrix(iris[-5]) ## convert to a numeric matrix 
-#' Knn(iris_df, 4)
+#' Knn(m=iris_df, 4)
 #' 
 #' @export
 Knn = function(m, k, nThreads = 10L, verbose=TRUE, indexType="angular", M=12L, MaxM0=24L, ef_search_multiplier=50, quiet=FALSE){
@@ -48,7 +48,7 @@ Knn = function(m, k, nThreads = 10L, verbose=TRUE, indexType="angular", M=12L, M
 #' @examples
 #' data(iris)
 #' iris_df = data.matrix(iris[-5]) ## convert to a numeric matrix 
-#' crossKnn(iris_df, head(iris_df, 50), 4)
+#' crossKnn(mA=iris_df, mB=head(iris_df, 50), 4)
 #' 
 #' @export
 crossKnn = function(mA, mB, k, nThreads = 10L, verbose=TRUE, indexType="angular", M=12L, MaxM0=24L, ef_search_multiplier=50, quiet=FALSE){

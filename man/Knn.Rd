@@ -44,6 +44,6 @@ Perform fast approximate K-nearest neighbor search on rows of the input matrix m
 \examples{
 data(iris)
 iris_df = data.matrix(iris[-5]) ## convert to a numeric matrix 
-Knn(iris_df, 4)
+Knn(m=iris_df, 4)
 
 }

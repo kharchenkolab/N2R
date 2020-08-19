@@ -47,6 +47,6 @@ Perform fast approximate K-nearest neighbor search of rows input matrix mA in ro
 \examples{
 data(iris)
 iris_df = data.matrix(iris[-5]) ## convert to a numeric matrix 
-crossKnn(iris_df, head(iris_df, 50), 4)
+crossKnn(mA=iris_df, mB=head(iris_df, 50), 4)
 
 }
