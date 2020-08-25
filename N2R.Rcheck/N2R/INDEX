@@ -1,0 +1,6 @@
+Knn                     Perform fast approximate K-nearest neighbor
+                        search on rows of the input matrix m.
+checkOpenMP             boolean to check OpenMP exists
+crossKnn                Perform fast approximate K-nearest neighbor
+                        search of rows input matrix mA in rows of
+                        matrix mB.

@@ -1,0 +1,3 @@
+name	user	system	elapsed
+Knn	0.433	1.088	0.277	
+crossKnn	0.169	0.462	0.090	
