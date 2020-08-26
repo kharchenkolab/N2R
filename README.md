@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/kharchenkolab/sccore.svg?branch=master)](https://travis-ci.com/kharchenkolab/sccore)
+
 # N2R
 R extensions to n2 implementing kNN functions, from conos
 
