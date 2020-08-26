@@ -1,20 +1,18 @@
 [![Build Status](https://travis-ci.com/kharchenkolab/sccore.svg?branch=master)](https://travis-ci.com/kharchenkolab/sccore)
 
 # N2R
-R extensions to n2 implementing kNN functions, from conos
+R extensions to N2 implementing kNN functions. 
 
-* version with Python and Go bindings here: https://github.com/kakao/n2
-(Note: both Python and Go extensions are quite different in design than this library.)
-
+Related libraries:
+* The original C++ library with Python and Go bindings here: https://github.com/kakao/n2 
 * Rust library here: https://github.com/rust-cv/hnsw
 
 
 ## Functions
 
-* `n2Knn()`: k-NN using n2 approximate nearest neighbors algorithm
-(similar to )
+* `n2Knn()`: k-NN using N2 approximate nearest neighbors algorithm
 
-* `n2CrossKnn()`: matrixA cross matrixB k-NN using n2 
+* `n2CrossKnn()`: matrixA cross matrixB k-NN using N2 
 
 
 
