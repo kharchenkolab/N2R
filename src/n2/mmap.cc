@@ -18,7 +18,7 @@
 #include <unistd.h>
 #include <string>
 
-#ifdef  _WIN32  // windows
+#if (defined(_WIN32) || defined(_WIN64))
 
 #include <windows.h>
 #include <memoryapi.h>
@@ -26,6 +26,9 @@
 #else // original code with mmap() and munmap(), Linux
 
 #include <sys/mman.h>
+
+#endif
+
 #include <sys/stat.h>
 #include <stdexcept>
 
@@ -45,7 +48,10 @@ Mmap::~Mmap() {
     }
 }
 
-#ifdef  _WIN32  // windows
+#if (defined(_WIN32) || defined(_WIN64))
+
+#include <windows.h>
+#include <memoryapi.h>
 
 // UnmapViewOfFile (LPCVOID lpBaseAddress);
 // MapViewOfFileFromApp (HANDLE hFileMappingObject, ULONG DesiredAccess, ULONG64 FileOffset, SIZE_T NumberOfBytesToMap);
@@ -94,6 +100,9 @@ void Mmap::UnMap() {
 // void *mmap(void *addr, size_t len, int prot, int flags,
 //       int fildes, off_t off);
 
+#include <sys/mman.h>
+
+
 void Mmap::Map(char const* fname) {
     UnMap();
     if (fname == nullptr) throw std::runtime_error("[Error] Invalid file name received. (nullptr)");
@@ -117,6 +126,8 @@ void Mmap::UnMap() {
         file_handle_ = -1;
     }    
 }
+
+#endif 
 
 size_t Mmap::QueryFileSize() const {
     struct stat sbuf;
