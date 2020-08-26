@@ -1,10 +1,11 @@
 # N2R
 R extensions to n2 implementing kNN functions, from conos
 
-* version with Python and Go bindings here: https://github.com/kakao/n2
+Newer version with Python and Go bindings here: https://github.com/kakao/n2
 (Note: both Python and Go extensions are quite different in design than this library.)
 
 * Rust library here: https://github.com/rust-cv/hnsw
+
 
 
 ## Functions
@@ -13,8 +14,6 @@ R extensions to n2 implementing kNN functions, from conos
 (similar to )
 
 * `n2CrossKnn()`: matrixA cross matrixB k-NN using n2 
-
-
 
 ## Installation
 
