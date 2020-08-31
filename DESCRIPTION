@@ -8,8 +8,12 @@ Description: Implements methods to perform fast approximate K-nearest neighbor s
 License: Apache License 2.0 
 Encoding: UTF-8
 Depends: Matrix
-Imports: Rcpp (>= 1.0.4)
+Imports: 
+	Rcpp (>= 1.0.4), 
+	RcppSpdlog
 Suggests: testthat
+Remotes:
+	eddelbuettel/RcppSpdlog
 LinkingTo: Rcpp, RcppEigen, RcppSpdlog
 SystemRequirements: GNU make
 RoxygenNote: 7.1.1
