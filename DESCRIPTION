@@ -10,7 +10,7 @@ Encoding: UTF-8
 Depends: Matrix
 Imports: Rcpp (>= 1.0.4)
 Suggests: testthat
-LinkingTo: Rcpp, RcppEigen
+LinkingTo: Rcpp, RcppEigen, RcppSpdlog
 SystemRequirements: GNU make
 RoxygenNote: 7.1.1
 URL: https://github.com/kharchenkolab/N2R

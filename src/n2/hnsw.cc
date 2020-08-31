@@ -59,7 +59,7 @@ thread_local VisitedList* visited_list_ = nullptr;
 Hnsw::Hnsw() {
     logger_ = spdlog::get("n2");
     if (logger_ == nullptr) {
-        logger_ = spdlog::stdout_logger_mt("n2");
+        logger_ = spdlog::r_sink_mt("n2");
     }
     metric_ = DistanceKind::ANGULAR;
     dist_cls_ = new AngularDistance();
@@ -68,7 +68,7 @@ Hnsw::Hnsw() {
 Hnsw::Hnsw(int dim, string metric) : data_dim_(dim) {
     logger_ = spdlog::get("n2");
     if (logger_ == nullptr) {
-        logger_ = spdlog::stdout_logger_mt("n2");
+        logger_ = spdlog::r_sink_mt("n2");
     }
     if (metric == "L2" || metric =="euclidean") {
         metric_ = DistanceKind::L2;
@@ -84,7 +84,7 @@ Hnsw::Hnsw(int dim, string metric) : data_dim_(dim) {
 Hnsw::Hnsw(const Hnsw& other) {
     logger_= spdlog::get("n2");
     if (logger_ == nullptr) {
-        logger_ = spdlog::stdout_logger_mt("n2");
+        logger_ = spdlog::r_sink_mt("n2");
     }
     model_byte_size_ = other.model_byte_size_;
     model_ = new char[model_byte_size_];
@@ -101,7 +101,7 @@ Hnsw::Hnsw(const Hnsw& other) {
 Hnsw::Hnsw(Hnsw& other) {
     logger_= spdlog::get("n2");
     if (logger_ == nullptr) {
-        logger_ = spdlog::stdout_logger_mt("n2");
+        logger_ = spdlog::r_sink_mt("n2");
     }
     model_byte_size_ = other.model_byte_size_;
     model_ = new char[model_byte_size_];
@@ -118,7 +118,7 @@ Hnsw::Hnsw(Hnsw& other) {
 Hnsw::Hnsw(Hnsw&& other) noexcept {
     logger_= spdlog::get("n2");
     if (logger_ == nullptr) {
-        logger_ = spdlog::stdout_logger_mt("n2");
+        logger_ = spdlog::r_sink_mt("n2");
     }
     model_byte_size_ = other.model_byte_size_;
     model_ = other.model_;
@@ -137,7 +137,7 @@ Hnsw::Hnsw(Hnsw&& other) noexcept {
 Hnsw& Hnsw::operator=(const Hnsw& other) {
     logger_= spdlog::get("n2");
     if (logger_ == nullptr) {
-        logger_ = spdlog::stdout_logger_mt("n2");
+        logger_ = spdlog::r_sink_mt("n2");
     }
 
     if(model_) {
@@ -166,7 +166,7 @@ Hnsw& Hnsw::operator=(const Hnsw& other) {
 Hnsw& Hnsw::operator=(Hnsw&& other) noexcept {
     logger_= spdlog::get("n2");
     if (logger_ == nullptr) {
-        logger_ = spdlog::stdout_logger_mt("n2");
+        logger_ = spdlog::r_sink_mt("n2");
     }
     if(model_mmap_) {
         delete model_mmap_;
