@@ -12,8 +12,6 @@ Imports:
 	Rcpp (>= 1.0.4), 
 	RcppSpdlog
 Suggests: testthat
-Remotes:
-	eddelbuettel/RcppSpdlog
 LinkingTo: Rcpp, RcppEigen, RcppSpdlog
 SystemRequirements: GNU make
 RoxygenNote: 7.1.1
