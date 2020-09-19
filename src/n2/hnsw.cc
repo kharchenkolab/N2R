@@ -26,6 +26,11 @@
 #include <thread>
 #include <xmmintrin.h>
 
+// this define is important to not include another logger pulling in stdout
+#define SPDLOG_DISABLE_DEFAULT_LOGGER 1
+
+#include <RcppSpdlog>
+
 #include "n2/hnsw.h"
 #include "n2/hnsw_node.h"
 #include "n2/distance.h"
@@ -57,18 +62,20 @@ using std::vector;
 thread_local VisitedList* visited_list_ = nullptr;
 
 Hnsw::Hnsw() {
-    logger_ = spdlog::get("n2");
+    std::string logname = "n2";
+    auto logger_ = spdlog::get(logname);
     if (logger_ == nullptr) {
-        logger_ = spdlog::r_sink_mt("n2");
+        logger_ = spdlog::r_sink_mt(logname);
     }
     metric_ = DistanceKind::ANGULAR;
     dist_cls_ = new AngularDistance();
 }
 
 Hnsw::Hnsw(int dim, string metric) : data_dim_(dim) {
-    logger_ = spdlog::get("n2");
+    std::string logname = "n2";
+    auto logger_ = spdlog::get(logname);
     if (logger_ == nullptr) {
-        logger_ = spdlog::r_sink_mt("n2");
+        logger_ = spdlog::r_sink_mt(logname);
     }
     if (metric == "L2" || metric =="euclidean") {
         metric_ = DistanceKind::L2;
@@ -82,9 +89,10 @@ Hnsw::Hnsw(int dim, string metric) : data_dim_(dim) {
 }
 
 Hnsw::Hnsw(const Hnsw& other) {
-    logger_= spdlog::get("n2");
+    std::string logname = "n2";
+    auto logger_= spdlog::get(logname);
     if (logger_ == nullptr) {
-        logger_ = spdlog::r_sink_mt("n2");
+        logger_ = spdlog::r_sink_mt(logname);
     }
     model_byte_size_ = other.model_byte_size_;
     model_ = new char[model_byte_size_];
@@ -99,9 +107,10 @@ Hnsw::Hnsw(const Hnsw& other) {
 }
 
 Hnsw::Hnsw(Hnsw& other) {
-    logger_= spdlog::get("n2");
+    std::string logname = "n2";
+    auto logger_= spdlog::get(logname);
     if (logger_ == nullptr) {
-        logger_ = spdlog::r_sink_mt("n2");
+        logger_ = spdlog::r_sink_mt(logname);
     }
     model_byte_size_ = other.model_byte_size_;
     model_ = new char[model_byte_size_];
@@ -116,9 +125,10 @@ Hnsw::Hnsw(Hnsw& other) {
 }
 
 Hnsw::Hnsw(Hnsw&& other) noexcept {
-    logger_= spdlog::get("n2");
+    std::string logname = "n2";
+    auto logger_= spdlog::get(logname);
     if (logger_ == nullptr) {
-        logger_ = spdlog::r_sink_mt("n2");
+        logger_ = spdlog::r_sink_mt(logname);
     }
     model_byte_size_ = other.model_byte_size_;
     model_ = other.model_;
@@ -135,11 +145,11 @@ Hnsw::Hnsw(Hnsw&& other) noexcept {
 }
 
 Hnsw& Hnsw::operator=(const Hnsw& other) {
-    logger_= spdlog::get("n2");
+    std::string logname = "n2";
+    auto logger_= spdlog::get(logname);
     if (logger_ == nullptr) {
-        logger_ = spdlog::r_sink_mt("n2");
+        logger_ = spdlog::r_sink_mt(logname);
     }
-
     if(model_) {
         delete [] model_;
         model_ = nullptr;
@@ -164,9 +174,10 @@ Hnsw& Hnsw::operator=(const Hnsw& other) {
 }
 
 Hnsw& Hnsw::operator=(Hnsw&& other) noexcept {
-    logger_= spdlog::get("n2");
+    std::string logname = "n2";
+    auto logger_= spdlog::get(logname);
     if (logger_ == nullptr) {
-        logger_ = spdlog::r_sink_mt("n2");
+        logger_ = spdlog::r_sink_mt(logname);
     }
     if(model_mmap_) {
         delete model_mmap_;

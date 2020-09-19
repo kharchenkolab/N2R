@@ -21,6 +21,9 @@
 #include <random>
 #include <vector>
 
+// this define is important to not include another logger pulling in stdout
+#define SPDLOG_DISABLE_DEFAULT_LOGGER 1
+
 #include <RcppSpdlog>
 
 // #include "spdlog/spdlog.h"
@@ -157,7 +160,7 @@ private:
     long long memory_per_data_ = 0;
     long long memory_per_link_level0_ = 0;
     long long memory_per_node_level0_ = 0;
-    long long memory_per_higher_level_ = 0;
+    // long long memory_per_higher_level_ = 0;
     long long memory_per_node_higher_level_ = 0;
     long long higher_level_offset_ = 0;
     long long level0_offset_ = 0;

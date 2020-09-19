@@ -1,0 +1,16 @@
+dCXX ?= g++
+PKG_CXXFLAGS = -std=c++14 -pthread -fPIC 
+PKG_CXXFLAGS += -I"./include"
+LDFLAGS += -lpthread
+
+LIB = ../libn2.lib
+lib: $(LIB)
+
+$(LIB): base.o hnsw.o hnsw_node.o distance.o heuristic.o mmap.o
+	ar rvs $@ $?
+
+
+clean:
+	@-rm -f *.o $(LIB) 
+
+

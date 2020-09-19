@@ -14,6 +14,11 @@
 
 #include "n2/hnsw_node.h"
 
+// this define is important to not include another logger pulling in stdout
+#define SPDLOG_DISABLE_DEFAULT_LOGGER 1
+
+#include <RcppSpdlog>
+
 namespace n2 {
 
 HnswNode::HnswNode(int id, const Data* data, int level, int maxsize, int maxsize0)
