@@ -32,10 +32,6 @@
 #include "n2/min_heap.h"
 
 
-// this define is important to not include another logger pulling in stdout
-//#define SPDLOG_DISABLE_DEFAULT_LOGGER 1
-
-//#include <RcppSpdlog>
 
 
 #define MERGE_BUFFER_ALGO_SWITCH_THRESHOLD 100
@@ -64,7 +60,8 @@ using std::vector;
 thread_local VisitedList* visited_list_ = nullptr;
 
 Hnsw::Hnsw() {
-    logger_ = spdlog::get("n2");
+    const std::string logname = "n2";     	// fix a name for this logger
+    logger_ = spdlog::r_sink_mt(logname);   	// create new logger
     /*if (logger_ == nullptr) {
         logger_ = spdlog::stdout_logger_mt("n2");
     }
