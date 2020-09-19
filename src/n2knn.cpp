@@ -1,6 +1,5 @@
 // [[Rcpp::depends(RcppEigen)]]
 
-#include <Rcpp.h>
 #include <RcppEigen.h>
 #include <queue>
 #include <algorithm>

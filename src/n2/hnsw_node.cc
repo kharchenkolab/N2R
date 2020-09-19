@@ -12,12 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "n2/hnsw_node.h"
 
 // this define is important to not include another logger pulling in stdout
-#define SPDLOG_DISABLE_DEFAULT_LOGGER 1
+//#define SPDLOG_DISABLE_DEFAULT_LOGGER 1
 
-#include <RcppSpdlog>
+// #include <RcppSpdlog>
+
+
+#include "n2/hnsw_node.h"
 
 namespace n2 {
 

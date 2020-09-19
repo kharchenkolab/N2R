@@ -1,4 +1,5 @@
 #' @useDynLib N2R
+#' @import Rcpp
 #' @import Matrix
 NULL
 
@@ -7,11 +8,11 @@ NULL
 #' @param m Input numeric matrix of data 
 #' @param k Integer number of clusters
 #' @param nThreads Integer number of threads (default=10)
-#' @param verbose Boolean flag for verbose output (default=TRUE)
+#' @param verbose Boolean flag for verbose output (default=FALSE)
 #' @param indexType Metric distance type, which can be "angular" or "L2" (default="angular")
 #' @param M Integer number of connections (default=12) The NSW graph is constructed via consecutive insertion of elements in random order by bidirectionally connecting them to the M closest neighbors from the previously inserted elements.
-#' @param MaxM0 Integer maximum number of connections that an element can have in the zero layer (default=24). It is recommended that MaxM0 not exceed 2*M.
-#' @param ef_search_multiplier Integer multiplier to calculate candidate nearest neighbors, set to k*ef_search_multiplier (default=50). Refer to the parameters 'er' and 'efConstruction' in Malkov & Yashunin (2020) doi: 10.1109/TPAMI.2018.2889473
+#' @param MaxM0 Integer maximum number of connections that an element can have in the zero layer. (default=24) It is recommended that MaxM0 not exceed 2*M.
+#' @param ef_search_multiplier Integer multiplier to calculate candidate nearest neighbors, set to k*ef_search_multiplier (default=50). Refer to the parameters er and efConstruction in Malkov & Yashunin (2020) doi: 10.1109/TPAMI.2018.2889473
 #' @param quiet Boolean flag specifically for Rcpp warnings (default=FALSE)
 #' @return clusters per row in sparse Matrix of class "dgCMatrix" of dimensions m rows by m rows
 #'
@@ -36,11 +37,11 @@ Knn = function(m, k, nThreads = 10L, verbose=TRUE, indexType="angular", M=12L, M
 #' @param mB Input numeric matrix of data
 #' @param k Integer number of clusters
 #' @param nThreads Integer number of threads (default=10)
-#' @param verbose Boolean flag for verbose output (default=TRUE)
+#' @param verbose Boolean flag for verbose output (default=FALSE)
 #' @param indexType Metric distance type, which can be "angular" or "L2" (default="angular")
-#' @param M Integer number of connections (default=12). The NSW graph is constructed via consecutive insertion of elements in random order by bidirectionally connecting them to the M closest neighbors from the previously inserted elements.
-#' @param MaxM0 Integer maximum number of connections that an element can have in the zero layer (default=24). It is recommended that MaxM0 not exceed 2*M.
-#' @param ef_search_multiplier Integer multiplier to calculate candidate nearest neighbors, set to k*ef_search_multiplier (default=50). Refer to the parameters 'er' and 'efConstruction' in Malkov & Yashunin (2020) doi: 10.1109/TPAMI.2018.2889473
+#' @param M Integer number of connections (default=12) The NSW graph is constructed via consecutive insertion of elements in random order by bidirectionally connecting them to the M closest neighbors from the previously inserted elements.
+#' @param MaxM0 Integer maximum number of connections that an element can have in the zero layer. (default=24) It is recommended that MaxM0 not exceed 2*M.
+#' @param ef_search_multiplier Integer multiplier to calculate candidate nearest neighbors, set to k*ef_search_multiplier (default=50). Refer to the parameters er and efConstruction in Malkov & Yashunin (2020) doi: 10.1109/TPAMI.2018.2889473
 #' @param quiet Boolean flag specifically for Rcpp warnings (default=FALSE)
 #' @return clusters per row in sparse Matrix of class "dgCMatrix" of dimensions mB rows by mA rows
 #'

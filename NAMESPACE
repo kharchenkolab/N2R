@@ -3,4 +3,5 @@
 export(Knn)
 export(crossKnn)
 import(Matrix)
+import(Rcpp)
 useDynLib(N2R)

@@ -26,15 +26,15 @@ crossKnn(
 
 \item{nThreads}{Integer number of threads (default=10)}
 
-\item{verbose}{Boolean flag for verbose output (default=TRUE)}
+\item{verbose}{Boolean flag for verbose output (default=FALSE)}
 
 \item{indexType}{Metric distance type, which can be "angular" or "L2" (default="angular")}
 
-\item{M}{Integer number of connections (default=12). The NSW graph is constructed via consecutive insertion of elements in random order by bidirectionally connecting them to the M closest neighbors from the previously inserted elements.}
+\item{M}{Integer number of connections (default=12) The NSW graph is constructed via consecutive insertion of elements in random order by bidirectionally connecting them to the M closest neighbors from the previously inserted elements.}
 
-\item{MaxM0}{Integer maximum number of connections that an element can have in the zero layer (default=24). It is recommended that MaxM0 not exceed 2*M.}
+\item{MaxM0}{Integer maximum number of connections that an element can have in the zero layer. (default=24) It is recommended that MaxM0 not exceed 2*M.}
 
-\item{ef_search_multiplier}{Integer multiplier to calculate candidate nearest neighbors, set to k*ef_search_multiplier (default=50). Refer to the parameters 'er' and 'efConstruction' in Malkov & Yashunin (2020) doi: 10.1109/TPAMI.2018.2889473}
+\item{ef_search_multiplier}{Integer multiplier to calculate candidate nearest neighbors, set to k*ef_search_multiplier (default=50). Refer to the parameters er and efConstruction in Malkov & Yashunin (2020) doi: 10.1109/TPAMI.2018.2889473}
 
 \item{quiet}{Boolean flag specifically for Rcpp warnings (default=FALSE)}
 }
