@@ -8,8 +8,6 @@
 #include <chrono>
 #include <vector>
 
-#include "n2/hnsw.h"
-//#include <RcppSpdlog>
 
 using std::chrono::duration;
 using std::chrono::duration_cast;
@@ -19,6 +17,10 @@ using std::chrono::high_resolution_clock;
 #define INDEX_TYPE_LP 3
 
 #include <RcppEigen.h>
+
+#include "n2/hnsw.h"
+//#include <RcppSpdlog>
+
 typedef Eigen::Triplet<double> T;
 
 // [[Rcpp::export]]
