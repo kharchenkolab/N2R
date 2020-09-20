@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "n2/hnsw.h"
-#include <RcppSpdlog>
+//#include <RcppSpdlog>
 
 using std::chrono::duration;
 using std::chrono::duration_cast;
