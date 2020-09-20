@@ -63,7 +63,7 @@ thread_local VisitedList* visited_list_ = nullptr;
 
 Hnsw::Hnsw() {    	
     const std::string logname = "n2"; // fix a name for this logger
-    logger_ = spdlog::r_sink_mt(logname);   // create new logger
+    //logger_ = spdlog::r_sink_mt(logname);   // create new logger
     metric_ = DistanceKind::ANGULAR;
     dist_cls_ = new AngularDistance();
 }
