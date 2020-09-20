@@ -58,7 +58,7 @@ Eigen::SparseMatrix<double> n2Knn(const NumericMatrix& m, int64_t k, int64_t nTh
   tripletList.reserve(nanswers);
 
   for(int64_t i=0;i<m.nrow();i++) {
-    std::vector<std::pair<int, float> > result;
+    std::vector<std::pair<int64_t, float> > result;
     index.SearchById(i, k, ef_search, result);
     int64_t nr=result.size();
     if(nr>k) nr=k;
@@ -113,7 +113,7 @@ Eigen::SparseMatrix<double> n2CrossKnn(const NumericMatrix& mA, const NumericMat
   for(int64_t i=0;i<mA.nrow();i++) {
     NumericVector nv = mA.row(i);
     std::vector<float> v(nv.begin(),nv.end());
-    std::vector<std::pair<int, float> > result;
+    std::vector<std::pair<int64_t, float> > result;
     index.SearchByVector(v, k, ef_search, result);
     int64_t nr=result.size();
     if(nr>k) nr=k;

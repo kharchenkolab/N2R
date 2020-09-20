@@ -641,7 +641,7 @@ void Hnsw::NormalizeVector(std::vector<float>& vec) {
    }
 }
 
-void Hnsw::SearchById_(int cur_node_id, float cur_dist, const float* qraw, size_t k, size_t ef_search, vector<pair<int, float> >& result) {
+void Hnsw::SearchById_(int cur_node_id, float cur_dist, const float* qraw, size_t k, size_t ef_search, vector<pair<int64_t, float> >& result) {
     MinHeap<float, int> dh;
     dh.push(cur_dist, cur_node_id);
     float PORTABLE_ALIGN32 TmpRes[8];
@@ -717,10 +717,10 @@ void Hnsw::SearchById_(int cur_node_id, float cur_dist, const float* qraw, size_
         sz = min(k, res_t.size());
     }
     for(size_t i = 0; i < sz; ++i)
-        result.push_back(pair<int, float>(res_t[i].second, res_t[i].first));
+        result.push_back(pair<int64_t, float>(res_t[i].second, res_t[i].first));
     if (ensure_k_ && need_sort) {
         _mm_prefetch(&result[0], _MM_HINT_T0);
-        sort(result.begin(), result.end(), [](const pair<int, float>& i, const pair<int, float>& j) -> bool {
+        sort(result.begin(), result.end(), [](const pair<int64_t, float>& i, const pair<int64_t, float>& j) -> bool {
                 return i.second < j.second; });
     }
 }
@@ -752,7 +752,7 @@ bool Hnsw::SetValuesFromModel(char* model) {
     }
     return false;
 }
-void Hnsw::SearchByVector(const vector<float>& qvec, size_t k, size_t ef_search, vector<pair<int, float>>& result) {
+void Hnsw::SearchByVector(const vector<float>& qvec, size_t k, size_t ef_search, vector<pair<int64_t, float>>& result) {
     if (model_ == nullptr) throw std::runtime_error("[Error] Model has not loaded!");
     float PORTABLE_ALIGN32 TmpRes[8];
     const float* qraw = nullptr;
@@ -773,7 +773,7 @@ void Hnsw::SearchByVector(const vector<float>& qvec, size_t k, size_t ef_search,
     float cur_dist = dist_cls_->Evaluate(qraw, (float *)(model_level0_ + cur_node_id*memory_per_node_level0_ + memory_per_link_level0_), data_dim_, TmpRes);
     float d;
 
-    vector<pair<int, float> > path;
+    vector<pair<int64_t, float> > path;
     if (ensure_k_) path.emplace_back(cur_node_id, cur_dist);
 
     bool changed;
@@ -813,7 +813,7 @@ void Hnsw::SearchByVector(const vector<float>& qvec, size_t k, size_t ef_search,
     }
 }
 
-void Hnsw::SearchById(int id, size_t k, size_t ef_search, vector<pair<int, float> >& result) {
+void Hnsw::SearchById(int id, size_t k, size_t ef_search, vector<pair<int64_t, float> >& result) {
     if (ef_search < 0) {
         ef_search = 50 * k;
     }
