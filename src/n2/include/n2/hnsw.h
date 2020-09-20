@@ -21,12 +21,12 @@
 #include <random>
 #include <vector>
 
-#include "spdlog/spdlog.h"
+//#include "spdlog/spdlog.h"
 
 // this define is important to not include another logger pulling in stdout
 //#define SPDLOG_DISABLE_DEFAULT_LOGGER 1
 
-// #include <RcppSpdlog>
+#include <RcppSpdlog>
 
 #include "base.h"
 #include "mmap.h"

@@ -17,12 +17,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // n2Knn
-Eigen::SparseMatrix<double> n2Knn(const NumericMatrix& m, int64_t k, int64_t nThreads, bool verbose, std::string indexType, int64_t M, int64_t MaxM0, float ef_search_multiplier, bool quiet);
+Eigen::SparseMatrix<double> n2Knn(const Rcpp::NumericMatrix& m, int64_t k, int64_t nThreads, bool verbose, std::string indexType, int64_t M, int64_t MaxM0, float ef_search_multiplier, bool quiet);
 RcppExport SEXP _N2R_n2Knn(SEXP mSEXP, SEXP kSEXP, SEXP nThreadsSEXP, SEXP verboseSEXP, SEXP indexTypeSEXP, SEXP MSEXP, SEXP MaxM0SEXP, SEXP ef_search_multiplierSEXP, SEXP quietSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type m(mSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type m(mSEXP);
     Rcpp::traits::input_parameter< int64_t >::type k(kSEXP);
     Rcpp::traits::input_parameter< int64_t >::type nThreads(nThreadsSEXP);
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
@@ -36,13 +36,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // n2CrossKnn
-Eigen::SparseMatrix<double> n2CrossKnn(const NumericMatrix& mA, const NumericMatrix& mB, int64_t k, int64_t nThreads, bool verbose, std::string indexType, int64_t M, int64_t MaxM0, float ef_search_multiplier, bool quiet);
+Eigen::SparseMatrix<double> n2CrossKnn(const Rcpp::NumericMatrix& mA, const Rcpp::NumericMatrix& mB, int64_t k, int64_t nThreads, bool verbose, std::string indexType, int64_t M, int64_t MaxM0, float ef_search_multiplier, bool quiet);
 RcppExport SEXP _N2R_n2CrossKnn(SEXP mASEXP, SEXP mBSEXP, SEXP kSEXP, SEXP nThreadsSEXP, SEXP verboseSEXP, SEXP indexTypeSEXP, SEXP MSEXP, SEXP MaxM0SEXP, SEXP ef_search_multiplierSEXP, SEXP quietSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type mA(mASEXP);
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type mB(mBSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type mA(mASEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type mB(mBSEXP);
     Rcpp::traits::input_parameter< int64_t >::type k(kSEXP);
     Rcpp::traits::input_parameter< int64_t >::type nThreads(nThreadsSEXP);
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
