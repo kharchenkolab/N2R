@@ -59,16 +59,18 @@ using std::vector;
 
 thread_local VisitedList* visited_list_ = nullptr;
 
-Hnsw::Hnsw() {
-    const std::string logname = "n2";     	// fix a name for this logger
+
+
+Hnsw::Hnsw() {    	
+    const std::string logname = "n2"; // fix a name for this logger
     logger_ = spdlog::r_sink_mt(logname);   // create new logger
     metric_ = DistanceKind::ANGULAR;
     dist_cls_ = new AngularDistance();
 }
 
 Hnsw::Hnsw(int dim, string metric) : data_dim_(dim) {
-    const std::string logname = "n2";       
-    logger_ = spdlog::r_sink_mt(logname); 
+    //const std::string logname = "n2";       
+    //logger_ = spdlog::r_sink_mt(logname); 
     if (metric == "L2" || metric =="euclidean") {
         metric_ = DistanceKind::L2;
         dist_cls_ = new L2Distance();
@@ -81,8 +83,8 @@ Hnsw::Hnsw(int dim, string metric) : data_dim_(dim) {
 }
 
 Hnsw::Hnsw(const Hnsw& other) {
-    const std::string logname = "n2";       
-    logger_ = spdlog::r_sink_mt(logname); 
+    //const std::string logname = "n2";       
+    //logger_ = spdlog::r_sink_mt(logname); 
     model_byte_size_ = other.model_byte_size_;
     model_ = new char[model_byte_size_];
     std::copy(other.model_, other.model_ + model_byte_size_, model_);
@@ -96,8 +98,8 @@ Hnsw::Hnsw(const Hnsw& other) {
 }
 
 Hnsw::Hnsw(Hnsw& other) {
-    const std::string logname = "n2";       
-    logger_ = spdlog::r_sink_mt(logname); 
+    //const std::string logname = "n2";       
+    //logger_ = spdlog::r_sink_mt(logname); 
     model_byte_size_ = other.model_byte_size_;
     model_ = new char[model_byte_size_];
     std::copy(other.model_, other.model_ + model_byte_size_, model_);
@@ -111,8 +113,8 @@ Hnsw::Hnsw(Hnsw& other) {
 }
 
 Hnsw::Hnsw(Hnsw&& other) noexcept {
-    const std::string logname = "n2";       
-    logger_ = spdlog::r_sink_mt(logname); 
+    //const std::string logname = "n2";       
+    //logger_ = spdlog::r_sink_mt(logname); 
     model_byte_size_ = other.model_byte_size_;
     model_ = other.model_;
     other.model_ = nullptr;
@@ -128,8 +130,8 @@ Hnsw::Hnsw(Hnsw&& other) noexcept {
 }
 
 Hnsw& Hnsw::operator=(const Hnsw& other) {
-    const std::string logname = "n2";       
-    logger_ = spdlog::r_sink_mt(logname); 
+    //const std::string logname = "n2";       
+    // logger_ = spdlog::r_sink_mt(logname); 
 
     if(model_) {
         delete [] model_;
@@ -155,8 +157,8 @@ Hnsw& Hnsw::operator=(const Hnsw& other) {
 }
 
 Hnsw& Hnsw::operator=(Hnsw&& other) noexcept {
-    const std::string logname = "n2";       
-    logger_ = spdlog::r_sink_mt(logname); 
+    //const std::string logname = "n2";       
+    // logger_ = spdlog::r_sink_mt(logname); 
     if(model_mmap_) {
         delete model_mmap_;
         model_mmap_ = nullptr;
