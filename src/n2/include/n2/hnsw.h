@@ -85,10 +85,10 @@ public:
     void Build(int M = -1, int M0 = -1, int ef_construction = -1, int n_threads = -1, float mult = -1, NeighborSelectingPolicy neighbor_selecting = NeighborSelectingPolicy::HEURISTIC, GraphPostProcessing graph_merging = GraphPostProcessing::SKIP, bool ensure_k = false);
 
     void SearchByVector(const std::vector<float>& qvec, size_t k, size_t ef_search,
-                        std::vector<std::pair<int64_t, float> >& result);
+                        std::vector<std::pair<int, float> >& result);
 
     void SearchById(int id, size_t k, size_t ef_search,
-                    std::vector<std::pair<int64_t, float> >& result);
+                    std::vector<std::pair<int, float> >& result);
 
     void PrintDegreeDist() const;
     void PrintConfigs() const;
@@ -105,7 +105,7 @@ private:
 
     void SearchById_(int cur_node_id, float cur_dist, const float* query_vec,
                      size_t k, size_t ef_search,
-                     std::vector<std::pair<int64_t, float> >& result);
+                     std::vector<std::pair<int, float> >& result);
 
     bool SetValuesFromModel(char* model);
     void NormalizeVector(std::vector<float>& vec);
