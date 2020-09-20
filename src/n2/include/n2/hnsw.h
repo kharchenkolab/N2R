@@ -28,8 +28,6 @@
 
 #include <RcppSpdlog>
 
-
-
 #include "base.h"
 #include "mmap.h"
 #include "distance.h"

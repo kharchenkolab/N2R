@@ -22,8 +22,8 @@ using namespace Rcpp;
 #define INDEX_TYPE_LP 3
 
 // [[Rcpp::export]]
-Eigen::SparseMatrix<double> n2Knn(const NumericMatrix& m, int k, int nThreads=10, bool verbose=true, std::string indexType="angular", int M=12, int MaxM0=24, float ef_search_multiplier=50, bool quiet=false) {
-  Eigen::SparseMatrix<double> mat(m.nrow(),m.nrow());
+Eigen::SparseMatrix<double> n2Knn(const NumericMatrix& m, int64_t k, int64_t nThreads=10, bool verbose=true, std::string indexType="angular", int64_t M=12, int64_t MaxM0=24, float ef_search_multiplier=50, bool quiet=false) {
+  Eigen::SparseMatrix<double> mat(m.nrow(), m.nrow());
 
   if(m.nrow() <= k) {
     if (!quiet) {
@@ -36,7 +36,7 @@ Eigen::SparseMatrix<double> n2Knn(const NumericMatrix& m, int k, int nThreads=10
   if(verbose) Rcout<<"creating space of type "<<indexType<<" done\n";
   n2::Hnsw index(m.ncol(), indexType);
   if(verbose) Rcout<<"adding data ... "<<flush;
-  for(int i=0;i<m.nrow();i++) {
+  for(int64_t i=0;i<m.nrow();i++) {
     NumericVector nv = m.row(i);
     std::vector<float> v(nv.begin(),nv.end());
     index.AddData(v);
@@ -47,9 +47,9 @@ Eigen::SparseMatrix<double> n2Knn(const NumericMatrix& m, int k, int nThreads=10
   index.Build(M, MaxM0, -1, nThreads);
   if(verbose) Rcout<<"done"<<endl;
 
-  int ef_search = k*ef_search_multiplier;
+  int64_t ef_search = k*ef_search_multiplier;
 
-  int nanswers=k*m.nrow();
+  int64_t nanswers=k*m.nrow();
 
   if(verbose) Rcout<<"querying ... "<<flush;
 
@@ -57,13 +57,13 @@ Eigen::SparseMatrix<double> n2Knn(const NumericMatrix& m, int k, int nThreads=10
   std::vector<T> tripletList;
   tripletList.reserve(nanswers);
 
-  for(int i=0;i<m.nrow();i++) {
+  for(int64_t i=0;i<m.nrow();i++) {
     std::vector<std::pair<int, float> > result;
     index.SearchById(i, k, ef_search, result);
-    int nr=result.size();
+    int64_t nr=result.size();
     if(nr>k) nr=k;
-    for(int j=0;j<nr;j++) {
-      int l=i*k+j;
+    for(int64_t j=0;j<nr;j++) {
+      int64_t l=i*k+j;
       //cout<<"i="<<i<<"; j="<<j<<"; n="<<result[j].first<<"; d="<<result[j].second<<endl;
       tripletList.push_back(T(result[j].first,i,result[j].second));
     }
@@ -76,7 +76,7 @@ Eigen::SparseMatrix<double> n2Knn(const NumericMatrix& m, int k, int nThreads=10
 
 
 // [[Rcpp::export]]
-Eigen::SparseMatrix<double> n2CrossKnn(const NumericMatrix& mA, const NumericMatrix& mB, int k, int nThreads=10, bool verbose=true, std::string indexType="angular", int M=12, int MaxM0=24, float ef_search_multiplier=50, bool quiet=false) {
+Eigen::SparseMatrix<double> n2CrossKnn(const NumericMatrix& mA, const NumericMatrix& mB, int64_t k, int64_t nThreads=10, bool verbose=true, std::string indexType="angular", int64_t M=12, int64_t MaxM0=24, float ef_search_multiplier=50, bool quiet=false) {
 
   Eigen::SparseMatrix<double> mat(mB.nrow(),mA.nrow());
 
@@ -91,7 +91,7 @@ Eigen::SparseMatrix<double> n2CrossKnn(const NumericMatrix& mA, const NumericMat
   if(verbose) Rcout<<"creating space of type "<<indexType<<" done\n";
   n2::Hnsw index(mB.ncol(), indexType);
   if(verbose) Rcout<<"adding data ... "<<flush;
-  for(int i=0;i<mB.nrow();i++) {
+  for(int64_t i=0;i<mB.nrow();i++) {
     NumericVector nv = mB.row(i);
     std::vector<float> v(nv.begin(),nv.end());
     index.AddData(v);
@@ -102,23 +102,23 @@ Eigen::SparseMatrix<double> n2CrossKnn(const NumericMatrix& mA, const NumericMat
   index.Build(M, MaxM0, -1, nThreads);
   if(verbose) Rcout<<"done"<<endl;
 
-  int ef_search = k*ef_search_multiplier;
+  int64_t ef_search = k*ef_search_multiplier;
 
-  int nanswers=k*mA.nrow();
+  int64_t nanswers=k*mA.nrow();
   std::vector<T> tripletList;
   tripletList.reserve(nanswers);
 
   if(verbose) Rcout<<"querying ... "<<flush;
 
-  for(int i=0;i<mA.nrow();i++) {
+  for(int64_t i=0;i<mA.nrow();i++) {
     NumericVector nv = mA.row(i);
     std::vector<float> v(nv.begin(),nv.end());
     std::vector<std::pair<int, float> > result;
     index.SearchByVector(v, k, ef_search, result);
-    int nr=result.size();
+    int64_t nr=result.size();
     if(nr>k) nr=k;
-    for(int j=0;j<nr;j++) {
-      int l=i*k+j;
+    for(int64_t j=0;j<nr;j++) {
+      int64_t l=i*k+j;
       tripletList.push_back(T(result[j].first,i,result[j].second));
     }
   }
