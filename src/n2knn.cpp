@@ -1,3 +1,6 @@
+#define R_NO_MAP
+
+#define STRICT_R_HEADERS
 
 #include <queue>
 #include <algorithm>
