@@ -1,6 +1,11 @@
-#define R_NO_MAP
+// details here on avoiding compilation errors 
+// https://github.com/kharchenkolab/N2R/pull/2
 
-#define STRICT_R_HEADERS
+// -- explicitly used std:: and Rcpp:: 
+// -- must place the '#include <RcppEigen.h>'' header before the '#include <RcppSpdlog>'' header
+
+#define R_NO_MAP    // R redefines things like Erorr; afterwards it becomes Rf_Error
+#define STRICT_R_HEADERS  // hides Calloc() as R_Calloc() etc.
 
 #include <queue>
 #include <algorithm>
@@ -18,7 +23,7 @@ using std::chrono::high_resolution_clock;
 
 #include <RcppEigen.h>
 
-#include "n2/hnsw.h"
+#include "n2/hnsw.h"   // <RcppSpdlog> included here
 
 
 typedef Eigen::Triplet<double> T;
