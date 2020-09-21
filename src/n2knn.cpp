@@ -1,6 +1,3 @@
-#define R_NO_MAP
-
-#define STRICT_R_HEADERS
 
 #include <queue>
 #include <algorithm>
@@ -19,7 +16,7 @@ using std::chrono::high_resolution_clock;
 #include <RcppEigen.h>
 
 #include "n2/hnsw.h"
-//#include <RcppSpdlog>
+
 
 typedef Eigen::Triplet<double> T;
 
