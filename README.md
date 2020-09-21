@@ -10,6 +10,17 @@ Related libraries:
 * Rust library here: https://github.com/rust-cv/hnsw
 
 
+## Installation
+
+To install the latest version, use:
+
+```r
+install.packages('devtools')
+devtools::install_github('kharchenkolab/N2R')
+```
+
+For installing from source on Mac OS, please see instructions in the wiki [here](https://github.com/kharchenkolab/N2R/wiki/Installing-N2R-for-Mac-OS)
+
 ## Functions
 
 * `n2Knn()`: k-NN using N2 approximate nearest neighbors algorithm
@@ -17,42 +28,13 @@ Related libraries:
 * `n2CrossKnn()`: matrixA cross matrixB k-NN using N2 
 
 
+## Citation
 
-## Installation
-
-For Mac OS X 10.15.5, 
-
-`brew install gcc gfortran`
-
-I've included `llvm` as well for my configuration below, though it's not required.
-
-including the following in my `~/.zshrc`:
+If you find `N2R` useful for your publication, please cite:
 
 ```
-export PATH="/usr/local/opt/llvm/bin:$PATH"
-export LDFLAGS="-L/usr/local/opt/llvm/lib"
-export CPPFLAGS="-I/usr/local/opt/llvm/include"
-```
-
-and my `.R/Makevars` contains:
-
-```
-XCBASE:=$(shell xcrun --show-sdk-path)
-LLVMBASE:=$(shell brew --prefix llvm)
-GCCBASE:=$(shell brew --prefix gcc)
-GETTEXT:=$(shell brew --prefix gettext)
-
-CC=$(LLVMBASE)/bin/clang -fopenmp
-CXX=$(LLVMBASE)/bin/clang++ -fopenmp
-CXX11=$(LLVMBASE)/bin/clang++ -fopenmp
-CXX14=$(LLVMBASE)/bin/clang++ -fopenmp
-CXX17=$(LLVMBASE)/bin/clang++ -fopenmp
-CXX1X=$(LLVMBASE)/bin/clang++ -fopenmp
-
-CPPFLAGS=-isystem "$(LLVMBASE)/include" -isysroot "$(XCBASE)"
-LDFLAGS=-L"$(LLVMBASE)/lib" -L"$(GETTEXT)/lib" --sysroot="$(XCBASE)"
-
-FC=$(GCCBASE)/bin/gfortran -fopenmp
-F77=$(GCCBASE)/bin/gfortran -fopenmp
-FLIBS=-L$(GCCBASE)/lib/gcc/9/ -lm
+Peter Kharchenko, Viktor Petukhov and Evan Biederstedt (2020). N2R:
+Fast and Scalable Approximate k-Nearest Neighbor Search Methods using
+N2 Library. R package version 0.1.0.
+https://github.com/kharchenkolab/N2R
 ```
