@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/kharchenkolab/sccore.svg?branch=master)](https://travis-ci.com/kharchenkolab/sccore)
+[![Build Status](https://travis-ci.com/kharchenkolab/N2R.svg?branch=master)](https://travis-ci.com/kharchenkolab/N2R)
 
 # N2R
 R extensions to N2 implementing kNN functions. 
