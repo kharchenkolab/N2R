@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.com/kharchenkolab/N2R.svg?branch=master)](https://travis-ci.com/kharchenkolab/N2R)
+[![CRAN status](https://www.r-pkg.org/badges/version/N2R)](https://cran.r-project.org/package=N2R)
+[![CRAN downloads](https://cranlogs.r-pkg.org/badges/N2R)](https://cran.r-project.org/package=N2R)
 
 # N2R
 R extensions to N2 implementing kNN functions. 
@@ -11,6 +13,12 @@ Related libraries:
 
 
 ## Installation
+
+To install the stable version from CRAN, use:
+
+```r
+install.packages('N2R')
+```
 
 To install the latest version, use:
 
