@@ -31,9 +31,9 @@ For installing from source on Mac OS, please see instructions in the wiki [here]
 
 ## Functions
 
-* `n2Knn()`: k-NN using N2 approximate nearest neighbors algorithm
+* `Knn()`: k-NN using N2 approximate nearest neighbors algorithm
 
-* `n2CrossKnn()`: matrixA cross matrixB k-NN using N2 
+* `crossKnn()`: matrixA cross matrixB k-NN using N2 
 
 
 ## Citation
