@@ -43,6 +43,6 @@ If you find `N2R` useful for your publication, please cite:
 ```
 Peter Kharchenko, Viktor Petukhov and Evan Biederstedt (2020). N2R:
 Fast and Scalable Approximate k-Nearest Neighbor Search Methods using
-N2 Library. R package version 0.1.0.
+N2 Library. R package version 0.1.1.
 https://github.com/kharchenkolab/N2R
 ```
