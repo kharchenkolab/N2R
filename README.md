@@ -5,7 +5,7 @@
 # N2R
 R extensions to N2 implementing kNN functions. 
 
-Implements methods to perform fast approximate K-nearest neighbor search on input matrix. Algorithm based on N2 implementation of an approximate nearest neighbor search using Hierarchical NSW graphs. The original algorithm is described in "Efficient and Robust Approximate Nearest Neighbor Search Using Hierarchical Navigable Small World Graphs", Y. Malkov and D. Yashunin, doi: 10.1109/TPAMI.2018.2889473, arXiv: 1603.09320.
+Implements methods to perform fast approximate K-nearest neighbor search on an input matrix. The algorithm implemented is based on the N2 implementation of an approximate nearest neighbor search using Hierarchical NSW graphs. The original algorithm is described in "Efficient and Robust Approximate Nearest Neighbor Search Using Hierarchical Navigable Small World Graphs", Y. Malkov and D. Yashunin, doi: 10.1109/TPAMI.2018.2889473, arXiv: 1603.09320.
 
 Related libraries:
 * The original C++ library with Python and Go bindings here: https://github.com/kakao/n2 
