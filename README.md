@@ -14,7 +14,7 @@ Related libraries:
 
 ## Installation
 
-To install the stable version from [CRAN](https://cran.r-project.org/web/packages/N2R/index.html), use:
+To install the stable version from [CRAN](https://CRAN.R-project.org/package=N2R), use:
 
 ```r
 install.packages('N2R')
