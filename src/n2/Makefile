@@ -11,5 +11,3 @@ $(LIB): base.o hnsw.o hnsw_node.o distance.o heuristic.o mmap.o
 
 clean:
 	@-rm -f *.o $(LIB) 
-
-

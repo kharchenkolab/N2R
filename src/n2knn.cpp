@@ -70,7 +70,7 @@ Eigen::SparseMatrix<double> n2Knn(const Rcpp::NumericMatrix& m, int64_t k, int64
     int64_t nr=result.size();
     if(nr>k) nr=k;
     for(int64_t j=0;j<nr;j++) {
-      int64_t l=i*k+j;
+      //int64_t l=i*k+j;
       //cout<<"i="<<i<<"; j="<<j<<"; n="<<result[j].first<<"; d="<<result[j].second<<endl;
       tripletList.push_back(T(result[j].first,i,result[j].second));
     }
@@ -125,7 +125,7 @@ Eigen::SparseMatrix<double> n2CrossKnn(const Rcpp::NumericMatrix& mA, const Rcpp
     int64_t nr=result.size();
     if(nr>k) nr=k;
     for(int64_t j=0;j<nr;j++) {
-      int64_t l=i*k+j;
+      //int64_t l=i*k+j;
       tripletList.push_back(T(result[j].first,i,result[j].second));
     }
   }
@@ -134,5 +134,3 @@ Eigen::SparseMatrix<double> n2CrossKnn(const Rcpp::NumericMatrix& mA, const Rcpp
   mat.setFromTriplets(tripletList.begin(),tripletList.end());
   return(mat);
 };
-
-

@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/kharchenkolab/N2R.svg?branch=master)](https://travis-ci.com/kharchenkolab/N2R)
+[![<kharchenkolab>](https://circleci.com/gh/kharchenkolab/N2R.svg?style=svg)](https://app.circleci.com/pipelines/github/kharchenkolab/N2R)
 [![CRAN status](https://www.r-pkg.org/badges/version/N2R)](https://cran.r-project.org/package=N2R)
 [![CRAN downloads](https://cranlogs.r-pkg.org/badges/N2R)](https://cran.r-project.org/package=N2R)
 
@@ -43,6 +43,6 @@ If you find `N2R` useful for your publication, please cite:
 ```
 Peter Kharchenko, Viktor Petukhov and Evan Biederstedt (2020). N2R:
 Fast and Scalable Approximate k-Nearest Neighbor Search Methods using
-N2 Library. R package version 0.1.1.
+N2 Library. R package version 1.0.0
 https://github.com/kharchenkolab/N2R
 ```
