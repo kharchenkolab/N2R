@@ -1,52 +1,48 @@
+[![<kharchenkolab>](https://circleci.com/gh/kharchenkolab/N2R.svg?style=svg)](https://app.circleci.com/pipelines/github/kharchenkolab/N2R)
+[![CRAN status](https://www.r-pkg.org/badges/version/N2R)](https://cran.r-project.org/package=N2R)
+[![CRAN downloads](https://cranlogs.r-pkg.org/badges/N2R)](https://cran.r-project.org/package=N2R)
+
 # N2R
-R extensions to n2 implementing kNN functions, from conos
+R extensions to N2 implementing kNN functions. 
 
-Newer version with Python and Go bindings here: https://github.com/kakao/n2
-(Note: both Python and Go extensions are quite different in design than this library.)
+Implements methods to perform fast approximate K-nearest neighbor search on an input matrix. The algorithm implemented is based on the N2 implementation of an approximate nearest neighbor search using Hierarchical NSW graphs. The original algorithm is described in "Efficient and Robust Approximate Nearest Neighbor Search Using Hierarchical Navigable Small World Graphs", Y. Malkov and D. Yashunin, doi: 10.1109/TPAMI.2018.2889473, arXiv: 1603.09320.
 
+Related libraries:
+* The original C++ library with Python and Go bindings here: https://github.com/kakao/n2 
+* Rust library here: https://github.com/rust-cv/hnsw
 
-## Functions
-
-* `n2Knn()`: k-NN using n2 approximate nearest neighbors algorithm
-(similar to )
-
-* `n2CrossKnn()`: matrixA cross matrixB k-NN using n2 
 
 ## Installation
 
-For Mac OS X 10.15.5, 
+To install the stable version from [CRAN](https://CRAN.R-project.org/package=N2R), use:
 
-`brew install gcc gfortran`
-
-I've included `llvm` as well for my configuration below, though it's not required.
-
-including the following in my `~/.zshrc`:
-
-```
-export PATH="/usr/local/opt/llvm/bin:$PATH"
-export LDFLAGS="-L/usr/local/opt/llvm/lib"
-export CPPFLAGS="-I/usr/local/opt/llvm/include"
+```r
+install.packages('N2R')
 ```
 
-and my `.R/Makevars` contains:
+To install the latest version, use:
+
+```r
+install.packages('devtools')
+devtools::install_github('kharchenkolab/N2R')
+```
+
+For installing from source on Mac OS, please see instructions in the wiki [here](https://github.com/kharchenkolab/N2R/wiki/Installing-N2R-for-Mac-OS)
+
+## Functions
+
+* `Knn()`: k-NN using N2 approximate nearest neighbors algorithm
+
+* `crossKnn()`: matrixA cross matrixB k-NN using N2 
+
+
+## Citation
+
+If you find `N2R` useful for your publication, please cite:
 
 ```
-XCBASE:=$(shell xcrun --show-sdk-path)
-LLVMBASE:=$(shell brew --prefix llvm)
-GCCBASE:=$(shell brew --prefix gcc)
-GETTEXT:=$(shell brew --prefix gettext)
-
-CC=$(LLVMBASE)/bin/clang -fopenmp
-CXX=$(LLVMBASE)/bin/clang++ -fopenmp
-CXX11=$(LLVMBASE)/bin/clang++ -fopenmp
-CXX14=$(LLVMBASE)/bin/clang++ -fopenmp
-CXX17=$(LLVMBASE)/bin/clang++ -fopenmp
-CXX1X=$(LLVMBASE)/bin/clang++ -fopenmp
-
-CPPFLAGS=-isystem "$(LLVMBASE)/include" -isysroot "$(XCBASE)"
-LDFLAGS=-L"$(LLVMBASE)/lib" -L"$(GETTEXT)/lib" --sysroot="$(XCBASE)"
-
-FC=$(GCCBASE)/bin/gfortran -fopenmp
-F77=$(GCCBASE)/bin/gfortran -fopenmp
-FLIBS=-L$(GCCBASE)/lib/gcc/9/ -lm
+Peter Kharchenko, Viktor Petukhov and Evan Biederstedt (2020). N2R:
+Fast and Scalable Approximate k-Nearest Neighbor Search Methods using
+N2 Library. R package version 1.0.0
+https://github.com/kharchenkolab/N2R
 ```
