@@ -3,7 +3,9 @@
 .travis.yml
 CHANGELOG.md
 ^LICENSE\.md$
-.git  
-.DS_Store
-..Rcheck
-N2R.Rcheck
+^docker$
+^doc$
+^Meta$
+^vignettes\*.md$
+^vignettes\figure$
+^\.circleci$
