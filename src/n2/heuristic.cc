@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <xmmintrin.h>
+// #include <xmmintrin.h>
+// https://stackoverflow.com/a/31185861/5269850
+#include <immintrin.h>
 
 #include "n2/base.h"
 #include "n2/heuristic.h"
