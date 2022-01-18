@@ -25,15 +25,12 @@
 #include <vector>
 #include <thread>
 
-// #include <xmmintrin.h>
-// https://stackoverflow.com/a/31185861/5269850
-#include <immintrin.h>
-
-
 #include "n2/hnsw.h"
 #include "n2/hnsw_node.h"
 #include "n2/distance.h"
 #include "n2/min_heap.h"
+#include "n2/simd.h"  // https://github.com/oddconcepts/n2o/commit/fe6214dcc06a1b13be60733c53ac25bca3c2b4d0
+
 
 
 
