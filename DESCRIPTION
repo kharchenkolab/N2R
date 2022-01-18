@@ -17,3 +17,4 @@ BugReports: https://github.com/kharchenkolab/N2R/issues
 NeedsCompilation: yes
 Author: Peter Kharchenko [aut], Viktor Petukhov [aut], Dirk Eddelbuettel [ctb], Evan Biederstedt [cre, aut]
 Maintainer: Evan Biederstedt <evan.biederstedt@gmail.com>
+
