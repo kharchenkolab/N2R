@@ -1,5 +1,5 @@
 CXX ?= g++
-PKG_CXXFLAGS =-pthread -I"./include" $(SHLIB_OPENMP_CXXFLAGS)
+PKG_CXXFLAGS = -O3 -pthread -fPIC -I"./include" $(SHLIB_OPENMP_CXXFLAGS)
 PKG_CXXFLAGS += -I"./include"
 LDFLAGS += -lpthread
 
