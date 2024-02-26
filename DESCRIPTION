@@ -1,7 +1,7 @@
 Package: N2R
 Type: Package
 Title: Fast and Scalable Approximate k-Nearest Neighbor Search Methods using 'N2' Library
-Version: 1.0.2
+Version: 1.0.3
 Authors@R: c(person("Peter", "Kharchenko", email = "Peter_Kharchenko@hms.harvard.edu", role = c("aut")), person("Viktor", "Petukhov", email = "viktor.s.petukhov@ya.ru", role = c("aut")), person("Dirk", "Eddelbuettel", email="edd@debian.org", role=c("ctb")), person("Evan", "Biederstedt", email = "evan.biederstedt@gmail.com", role=c("cre", "aut")))
 Description: Implements methods to perform fast approximate K-nearest neighbor search on input matrix. Algorithm based on the 'N2' implementation of an approximate nearest neighbor search using hierarchical  Navigable Small World (NSW) graphs. The original algorithm is described in "Efficient and Robust Approximate Nearest Neighbor Search Using Hierarchical Navigable Small World Graphs", Y. Malkov and D. Yashunin, <doi:10.1109/TPAMI.2018.2889473>, <arXiv:1603.09320>.
 License: Apache License 2.0 

@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.0.3] - 2024-Feb-26
+* Need to explicitly set `CXX ?= g++` as some default clang settings need explicit '-std=c++11'
+
 ## [1.0.2] - 2024-Feb-22
 * Remove 'SystemRequirements: C++11, GNU make'
 * Fix Makevars files
