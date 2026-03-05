@@ -2,6 +2,7 @@
 
 ## [1.0.4] - 2026-March-05
 * Reformat the arXiv DOI for CRAN
+* Remove 'Rcpp:::LdFlags()' as no longer needed based on CRAN 
 
 ## [1.0.3] - 2024-Feb-26
 * Need to explicitly set `CXX ?= g++` as some default clang settings need explicit '-std=c++11'
