@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.0.5] - 2026-March-09
+* Revert to using int in Rcpp (not int64_t) to avoid misalignment errors via gcc-UBSAN checks
+
 ## [1.0.4] - 2026-March-05
 * Reformat the arXiv DOI for CRAN
 * Remove 'Rcpp:::LdFlags()' as no longer needed based on CRAN 
