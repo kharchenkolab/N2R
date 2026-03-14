@@ -12,27 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "n2/mmap.h"
 
 #include <fcntl.h>
-#include <iostream>
-#include <unistd.h>
-#include <string>
-
-#if (defined(_WIN32) || defined(_WIN64))
-
-#include <windows.h>
-#include <memoryapi.h>
-
-#else // original code with mmap() and munmap(), Linux
-
 #include <sys/mman.h>
-
-#endif
-
 #include <sys/stat.h>
-#include <stdexcept>
 
-#include "n2/mmap.h"
+#include <iostream>
+#include <stdexcept>
+#include <string>
 
 namespace n2 {
 
@@ -42,66 +30,11 @@ Mmap::Mmap(char const* fname) {
    
 Mmap::~Mmap() {
     UnMap();
-    if(file_handle_ != -1) {
+    if (file_handle_ != -1) {
         close(file_handle_);
         file_handle_ = -1;
     }
 }
-
-#if (defined(_WIN32) || defined(_WIN64))
-
-#include <windows.h>
-#include <memoryapi.h>
-
-// UnmapViewOfFile (LPCVOID lpBaseAddress);
-// MapViewOfFileFromApp (HANDLE hFileMappingObject, ULONG DesiredAccess, ULONG64 FileOffset, SIZE_T NumberOfBytesToMap);
-// VirtualAllocFromApp(PVOID BaseAddress, SIZE_T Size, ULONG AllocationType, ULONG  Protection);
-
-void Mmap::Map(char const* fname) {
-    UnMap();
-    if (fname == nullptr) throw std::runtime_error("[Error] Invalid file name received. (nullptr)");
-    file_handle_ = open(fname, O_RDONLY);
-    if (file_handle_ == -1) throw std::runtime_error("[Error] Failed to read file: " + std::string(fname));
-    file_size_ = QueryFileSize();
-    if (file_size_ <= 0) throw std::runtime_error("[Error] Memory mapping failed! (file_size==zero)");
-    data_ = static_cast<char*>(VirtualAlloc(nullptr, file_size_, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE));
-    // If the function fails, the return value is NULL.
-    if (data_ == NULL) throw std::runtime_error("[Error] Memory mapping failed!");
-}
-
-void Mmap::UnMap() {
-    if (data_ != nullptr) {
-        int ret = UnmapViewOfFile(const_cast<char*>(data_));
-        // If the function succeeds, the return value is nonzero.
-        // If the function fails, the return value is zero.
-        if (ret == 0) throw std::runtime_error("[Error] Memory unmapping failed!");
-    }
-    data_ = nullptr;
-    file_size_ = 0;
-    if(file_handle_ != -1) {
-        close(file_handle_);
-        file_handle_ = -1;
-    }    
-}
-
-
-#else // original code with mmap() and munmap(), Linux
-
-// /* Deallocate any mapping for the region starting at ADDR and extending LEN
-// bytes.  Returns 0 if successful, -1 for errors (and sets errno).  */
-// extern int munmap (void *__addr, size_t __len) __THROW;
-
-// /* Return value of `mmap' in case of an error.  */
-// #define MAP_FAILED        ((void *) -1)
-
-// extern void *mmap (void *__addr, size_t __len, int __prot,
-//                   int __flags, int __fd, __off_t __offset) __THROW;
-
-// void *mmap(void *addr, size_t len, int prot, int flags,
-//       int fildes, off_t off);
-
-#include <sys/mman.h>
-
 
 void Mmap::Map(char const* fname) {
     UnMap();
@@ -116,18 +49,16 @@ void Mmap::Map(char const* fname) {
 
 void Mmap::UnMap() {
     if (data_ != nullptr) {
-        int ret = munmap(const_cast<char*>(data_), file_size_);
+        int ret = munmap(static_cast<void*>(data_), file_size_);
         if (ret != 0) throw std::runtime_error("[Error] Memory unmapping failed!");
     }
     data_ = nullptr;
     file_size_ = 0;
-    if(file_handle_ != -1) {
+    if (file_handle_ != -1) {
         close(file_handle_);
         file_handle_ = -1;
     }    
 }
-
-#endif 
 
 size_t Mmap::QueryFileSize() const {
     struct stat sbuf;

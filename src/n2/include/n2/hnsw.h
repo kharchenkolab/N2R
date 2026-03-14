@@ -13,166 +13,261 @@
 // limitations under the License.
 
 #pragma once
+/** @file */
+// original - #include <omp.h>
 
-#include <iostream>
+// got from here: https://github.com/Rdatatable/data.table/blob/master/src/myomp.h
+#ifdef _OPENMP
+  #include <omp.h>
+  #if _OPENMP >= 201511
+    #define monotonic_dynamic monotonic:dynamic // #4786
+  #else
+    #define monotonic_dynamic dynamic
+  #endif
+  #define MY_OPENMP              _OPENMP
+  // for use in error messages (e.g. fsort.c; #4786) to save an #ifdef each time
+  // initially chose OMP_VERSION but figured OpenMP might define that in future, so picked MY_ prefix
+#else
+  // for machines with compilers void of openmp support
+  #define omp_get_num_threads()  1
+  #define omp_get_thread_num()   0
+  #define omp_get_max_threads()  1
+  #define omp_get_thread_limit() 1
+  #define omp_get_num_procs()    1
+  #define omp_get_wtime()        0
+  #define MY_OPENMP              0
+#endif
+
+
 #include <memory>
-#include <mutex>
-#include <queue>
-#include <random>
+#include <string>
+#include <utility>
 #include <vector>
 
-//#include "spdlog/spdlog.h"
-
-// this define is important to not include another logger pulling in stdout
-//#define SPDLOG_DISABLE_DEFAULT_LOGGER 1
-
-#include <RcppSpdlog>
-
-#include "base.h"
-#include "mmap.h"
-#include "distance.h"
-#include "sort.h"
-#include "heuristic.h"
+#include "hnsw_build.h"
+#include "hnsw_model.h"
+#include "hnsw_search.h"
 
 namespace n2 {
 
-class VisitedList {
-public:
-    VisitedList(int size)
-    : size_(size), mark_(1) {
-        visited_ = new unsigned int[size_];
-        memset(visited_, 0, sizeof(unsigned int)*size_);
-    }
-
-    inline unsigned int GetVisitMark() const { return mark_; }
-    inline unsigned int* GetVisited() const { return visited_; }
-    void Reset() {
-        if (++mark_ == 0) {
-            mark_ = 1;
-            memset(visited_, 0, sizeof(unsigned int)*size_);
-        }
-    }
-    ~VisitedList() {
-        delete [] visited_;
-    }
-
-public:
-    unsigned int* visited_;
-    unsigned int size_;
-    unsigned int mark_;
-};
-
-class Hnsw{
+class Hnsw {
 public:
     Hnsw();
-    Hnsw(int dim, std::string metric = "angular");
+
+    /**
+     * @brief Makes an instance of Hnsw Index.
+     * @param dim: Dimension of vectors.
+     * @param metric: An optional parameter to choose a distance metric.
+     *        ('angular' | 'L2' | 'dot') (default: 'angular').
+     * @return A new Hnsw index.
+     */
+    Hnsw(int dim,std::string metric="angular");
     Hnsw(const Hnsw& other);
-    Hnsw(Hnsw& other);
     Hnsw(Hnsw&& other) noexcept;
     ~Hnsw();
 
     Hnsw& operator=(const Hnsw& other);
     Hnsw& operator=(Hnsw&& other) noexcept;
-    void SetConfigs(const std::vector<std::pair<std::string, std::string> >& configs);
 
-    bool SaveModel(const std::string& fname) const;
-    bool LoadModel(const std::string& fname, const bool use_mmap=true);
-    void UnloadModel();
+    ////////////////////////////////////////////
+    // Build
 
+    /**
+     * @brief Adds vector to Hnsw index.
+     * @param data: A vector with dimension ``dim``.
+     */
     void AddData(const std::vector<float>& data);
 
+    /**
+     * @brief Set configurations by key/value pairs.
+     *
+     * To set configurations as default values, pass negative values to configuration parameters.
+     */
+    void SetConfigs(const std::vector<std::pair<std::string, std::string>>& configs);
+    
+    /**
+     * @brief Builds a hnsw graph with given configurations.
+     * @param m: Max number of edges for nodes at level > 0 (default: 12).
+     * @param max_m0: Max number of edges for nodes at level == 0 (default: 24).
+     * @param ef_construction: Refer to HNSW paper for its role (default: 150).
+     * @param n_threads: Number of threads for building index.
+     * @param mult: Level multiplier (default value recommended) (default: 1/log(1.0*M)).
+     * @param NeighborSelectingPolicy: Neighbor selecting policy.
+     * @param GraphPostProcessing: Graph merging heuristic.
+     *
+     * To see other available values for ``neighbor_selecting`` and ``graph_merging``,
+     * refer to NeighborSelectingPolicy() and GraphPostProcessing().
+     * @see Fit(), SetConfigs()
+     */
+    void Build(int m=-1, int max_m0=-1, int ef_construction=-1,
+               int n_threads=-1, float mult=-1,
+               NeighborSelectingPolicy neighbor_selecting=NeighborSelectingPolicy::HEURISTIC,
+               GraphPostProcessing graph_merging=GraphPostProcessing::SKIP,
+               bool ensure_k=false);
+
+    /**
+     * @brief Builds a hnsw graph with given configurations.
+     */
     void Fit();
-    void Build(int M = -1, int M0 = -1, int ef_construction = -1, int n_threads = -1, float mult = -1, NeighborSelectingPolicy neighbor_selecting = NeighborSelectingPolicy::HEURISTIC, GraphPostProcessing graph_merging = GraphPostProcessing::SKIP, bool ensure_k = false);
 
-    void SearchByVector(const std::vector<float>& qvec, size_t k, size_t ef_search,
-                        std::vector<std::pair<int, float> >& result);
+    ////////////////////////////////////////////
+    // Model
+    /**
+     * @brief Saves the index to disk.
+     * @param fname: An index file name.
+     */
+    bool SaveModel(const std::string& fname) const;
 
-    void SearchById(int id, size_t k, size_t ef_search,
-                    std::vector<std::pair<int, float> >& result);
+    /**
+     * @brief Loads an index from disk.
+     * @param fname: An index file name.
+     * @param use_mmap: An optional parameter (default: true).
+     *        If this parameter is set, N2 loads model through mmap.
+     */
+    bool LoadModel(const std::string& fname, const bool use_mmap=true);
 
+    /**
+     * @brief Unloads the loaded index file.
+     */
+    void UnloadModel();
+ 
+    ////////////////////////////////////////////
+    // Search 
+    inline void SearchByVector(const std::vector<float>& qvec, size_t k, size_t ef_search,
+                               std::vector<int>& result) {
+        searcher_->SearchByVector(qvec, k, ef_search, ensure_k_, result);
+    }
+
+    /**
+     * @brief Search k nearest items (as vectors) to a query item.
+     * @param qvec: A query vector.
+     * @param k: k value.
+     * @param ef_search: (default: 50 * k). If you pass a negative value to ef_search,
+     *        ef_search will be set as the default value.
+     * @param[out] result: ``k`` nearest items.
+     */
+    inline void SearchByVector(const std::vector<float>& qvec, size_t k, 
+                               size_t ef_search,
+                               std::vector<std::pair<int, float>>& result) {
+        searcher_->SearchByVector(qvec, k, ef_search, ensure_k_, result);
+    }
+    inline void SearchById(int id, size_t k, size_t ef_search, std::vector<int>& result) {
+        searcher_->SearchById(id, k, ef_search, ensure_k_, result);
+    }
+
+    /**
+     * @brief Search k nearest items (as ids) to a query item.
+     * @param id: A query id.
+     * @param k: k value.
+     * @param ef_search: (default: 50 * k). If you pass a negative value to ef_search,
+     *        ef_search will be set as the default value.
+     * @param[out] result: ``k`` nearest items.
+     */
+    inline void SearchById(int id, size_t k, size_t ef_search,
+        std::vector<std::pair<int, float>>& result) {
+        searcher_->SearchById(id, k, ef_search, ensure_k_, result);
+    }
+
+    inline void BatchSearchByVectors(const std::vector<std::vector<float>>& qvecs, size_t k, 
+                                     size_t ef_search, size_t n_threads, std::vector<std::vector<int>>& results) {
+        BatchSearchByVectors_(qvecs, k, ef_search, n_threads, results);
+    }
+
+    /**
+     * @brief Search k nearest items (as vectors) to each query item (batch search with multi-threads).
+     * @param qvecs: Query vectors.
+     * @param k: k value.
+     * @param ef_search: (default: 50 * k). If you pass a negative value to ef_search,
+     *        ef_search will be set as the default value.
+     * @param n_threads: Number of threads to use for search.
+     * @param[out] result: vector of ``k`` nearest items for each input query item
+     *             in the order passed to parameter ``qvecs``.
+     */
+    inline void BatchSearchByVectors(const std::vector<std::vector<float>>& qvecs, size_t k, 
+                                     size_t ef_search, size_t n_threads, 
+                                     std::vector<std::vector<std::pair<int, float>>>& results) {
+        BatchSearchByVectors_(qvecs, k, ef_search, n_threads, results);
+    }
+    inline void BatchSearchByIds(const std::vector<int> ids, size_t k, size_t ef_search, size_t n_threads,
+                                 std::vector<std::vector<int>>& results) {
+        BatchSearchByIds_(ids, k, ef_search, n_threads, results);
+    }
+
+    /**
+     * @brief Search k nearest items (as ids) to each query item (batch search with multi-threads).
+     * @param ids: Query ids.
+     * @param k: k value.
+     * @param ef_search: (default: 50 * k). If you pass a negative value to ef_search,
+     *        ef_search will be set as the default value.
+     * @param n_threads: Number of threads to use for search.
+     * @param[out] result: vector of ``k`` nearest items for each input query item
+     *             in the order passed to parameter ``ids``.
+     */
+    inline void BatchSearchByIds(const std::vector<int> ids, size_t k, size_t ef_search, size_t n_threads,
+                                 std::vector<std::vector<std::pair<int, float>>>& results) {
+        BatchSearchByIds_(ids, k, ef_search, n_threads, results);
+    }
+
+    ////////////////////////////////////////////
+    // Build(Misc)
+    /**
+     * @brief Prints degree distributions.
+     */
     void PrintDegreeDist() const;
+
+    /**
+     * @brief Prints index configurations.
+     */
     void PrintConfigs() const;
 
 private:
-    int DrawLevel(bool use_default_rng=false);
+    void InitSearcherAndSearcherPool_();
 
-    void BuildGraph(bool reverse);
-    void Insert(HnswNode* qnode);
-    void Link(HnswNode* source, HnswNode* target, int level, bool is_naive, size_t dim);
-    void SearchAtLayer(const std::vector<float>& qvec, HnswNode* enterpoint,
-                       int level, size_t ef,
-                       std::priority_queue<FurtherFirst>& result);
+    template<typename ResultType>
+    void BatchSearchByVectors_(const std::vector<std::vector<float>>& qvecs, size_t k, 
+                               size_t ef_search, size_t n_threads, ResultType& results) {
+        results.resize(qvecs.size());
+        while (searcher_pool_.size() < n_threads) {
+            searcher_pool_.push_back(HnswSearch::GenerateSearcher(model_, data_dim_, metric_));
+        }
 
-    void SearchById_(int cur_node_id, float cur_dist, const float* query_vec,
-                     size_t k, size_t ef_search,
-                     std::vector<std::pair<int, float> >& result);
-
-    bool SetValuesFromModel(char* model);
-    void NormalizeVector(std::vector<float>& vec);
-    void MergeEdgesOfTwoGraphs(const std::vector<HnswNode*>& another_nodes);
-    size_t GetModelConfigSize() const;
-    void SaveModelConfig(char* model);
-    template <typename T>
-    char* SetValueAndIncPtr(char* ptr, const T& val) {
-        *((T*)(ptr)) = val;
-        return ptr + sizeof(T);
+        #pragma omp parallel num_threads(n_threads)
+        {
+            #pragma omp for schedule(runtime)
+            for (size_t i = 0; i < qvecs.size(); ++i) {
+                auto& s = searcher_pool_[omp_get_thread_num()];
+                s->SearchByVector(qvecs[i], k, ef_search, ensure_k_, results[i]);
+            }
+        }
     }
-    template <typename T>
-    char* GetValueAndIncPtr(char* ptr, T& val) {
-        val = *((T*)(ptr));
-        return ptr + sizeof(T);
+
+    template<typename ResultType>
+    void BatchSearchByIds_(const std::vector<int> ids, size_t k, size_t ef_search, size_t n_threads,
+                           ResultType& results) {
+        results.resize(ids.size());
+        while (searcher_pool_.size() < n_threads) {
+            searcher_pool_.push_back(HnswSearch::GenerateSearcher(model_, data_dim_, metric_));
+        }
+
+        #pragma omp parallel num_threads(n_threads)
+        {
+            #pragma omp for schedule(runtime)
+            for (size_t i = 0; i < ids.size(); ++i) {
+                auto& s = searcher_pool_[omp_get_thread_num()];
+                s->SearchById(ids[i], k, ef_search, ensure_k_, results[i]);
+            }
+        }
     }
 
 private:
-    std::shared_ptr<spdlog::logger> logger_;
-    std::unique_ptr<VisitedList> search_list_;
+    std::unique_ptr<HnswBuild> builder_;
+    std::shared_ptr<const HnswModel> model_;
+    std::shared_ptr<HnswSearch> searcher_;                      // for single-thread search
+    std::vector<std::shared_ptr<HnswSearch>> searcher_pool_;    // for multi-threads batch search
 
-    const std::string n2_signature = "TOROS_N2@N9R4";
-    size_t M_ = 12;
-    size_t MaxM_ = 12;
-    size_t MaxM0_ = 24;
-    size_t efConstruction_ = 150;
-    float levelmult_ = 1 / log(1.0*M_);
-    int num_threads_ = 1;
-    bool ensure_k_ = false;
-    bool is_naive_ = false;
-    GraphPostProcessing post_ = GraphPostProcessing::SKIP;
-
-    BaseDistance* dist_cls_ = nullptr;
-    BaseNeighborSelectingPolicies* selecting_policy_cls_ = new HeuristicNeighborSelectingPolicies(false);
-    BaseNeighborSelectingPolicies* post_policy_cls_ = new HeuristicNeighborSelectingPolicies(true);
-    std::uniform_real_distribution<double> uniform_distribution_{0.0, 1.0};
-    std::default_random_engine* default_rng_ = nullptr;
-    std::mt19937 rng_;
-
-    int maxlevel_ = 0;
-    HnswNode* enterpoint_ = nullptr;
-    int enterpoint_id_ = 0;
-    std::vector<Data> data_;
-    std::vector<HnswNode*> nodes_;
-    int num_nodes_ = 0;
+    size_t data_dim_;
     DistanceKind metric_;
-    char* model_ = nullptr;
-    long long model_byte_size_ = 0;
-    char* model_higher_level_ = nullptr;
-    char* model_level0_ = nullptr;
-    size_t data_dim_ = 0;
-    long long memory_per_data_ = 0;
-    long long memory_per_link_level0_ = 0;
-    long long memory_per_node_level0_ = 0;
-    long long memory_per_higher_level_ = 0;
-    long long memory_per_node_higher_level_ = 0;
-    long long higher_level_offset_ = 0;
-    long long level0_offset_ = 0;
-
-    Mmap* model_mmap_ = nullptr;
-
-    mutable std::mutex node_list_guard_;
-    mutable std::mutex max_level_guard_;
-
-    // configurations
-    int rng_seed_ = 17;
-    bool use_default_rng_ = false;
+    bool ensure_k_ = false;
 };
 
 } // namespace n2

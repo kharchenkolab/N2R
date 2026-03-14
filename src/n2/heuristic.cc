@@ -12,68 +12,99 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "n2/base.h"
 #include "n2/heuristic.h"
-#include "n2/simd.h"   // https://github.com/oddconcepts/n2o/commit/fe6214dcc06a1b13be60733c53ac25bca3c2b4d0
+
+#include <xmmintrin.h>
+
+#include <vector>
+
+#include "n2/min_heap.h"
 
 namespace n2 {
 
+using std::priority_queue;
+using std::vector;
+
 BaseNeighborSelectingPolicies::~BaseNeighborSelectingPolicies() {}
 
-void NaiveNeighborSelectingPolicies::Select(const size_t m, std::priority_queue<FurtherFirst>& result, size_t dim, const BaseDistance* dist_cls) {
+void NaiveNeighborSelectingPolicies::Select(size_t m, size_t dim, bool select_nn, 
+                                            priority_queue<FurtherFirst>& result) {
     while (result.size() > m) {
         result.pop();
     }
 }
 
-void HeuristicNeighborSelectingPolicies::Select(const size_t m, std::priority_queue<FurtherFirst>& result, size_t dim, const BaseDistance* dist_cls) {
-    if (result.size() < m) return;
-    
-    float PORTABLE_ALIGN32 TmpRes[8];
-    std::vector<FurtherFirst> neighbors, picked;
+template<typename DistFuncType>
+void HeuristicNeighborSelectingPolicies<DistFuncType>::Select(size_t m, size_t dim, bool select_nn, 
+                                                              priority_queue<FurtherFirst>& result) {
+    if (result.size() <= m) return;
+  
+    size_t nn_num = 0;  // # of nearest neighbors
+    if (select_nn) {
+        nn_num = (size_t)(m * 0.25);
+        // m - nn_num neighbors will be chosen as usual with the heuristic algorithm
+    }
+    size_t nn_picked_num = 0;  // # of nearest neighbors also picked by the heuristic algorithm
+    // nn_num - nn_picked_num = # of nearest neighbors selected unconditionally but not picked by the heuristic algorithm 
+
+    vector<FurtherFirst> neighbors, picked;
     MinHeap<float, HnswNode*> skipped;
-    while(!result.empty()) {
+    while (!result.empty()) {
         neighbors.push_back(result.top());
         result.pop();
     }
 
-    for (size_t i = 0; i < neighbors.size(); ++i) {
-        _mm_prefetch((char*)&(neighbors[i].GetNode()->GetData()), _MM_HINT_T0);
-    }
+    for (auto it = neighbors.rbegin(); it != neighbors.rend(); it++) {
+        float cur_dist = it->GetDistance();
+        HnswNode* cur_node = it->GetNode();
+        _mm_prefetch(cur_node->GetData(), _MM_HINT_T0);
+        bool nn_selected = false;
+        if (result.size() < nn_num) {
+            result.emplace(*it);
+            nn_selected = true;
+        }
 
-    for (int i = (int)neighbors.size() - 1; i >= 0; --i) {
         bool skip = false;
-        float cur_dist = neighbors[i].GetDistance();
         for (size_t j = 0; j < picked.size(); ++j) {
             if (j < picked.size() - 1) {
-                _mm_prefetch((char*)&(picked[j+1].GetNode()->GetData()), _MM_HINT_T0);
+                _mm_prefetch(picked[j+1].GetNode()->GetData(), _MM_HINT_T0);
             }
-            _mm_prefetch(&dist_cls, _MM_HINT_T1);
-            if (dist_cls->Evaluate((float*)&neighbors[i].GetNode()->GetData()[0], (float*)&picked[j].GetNode()->GetData()[0], dim, TmpRes) < cur_dist) {
+            _mm_prefetch(cur_node->GetData(), _MM_HINT_T1);
+            if (dist_func_(cur_node, picked[j].GetNode(), dim) < cur_dist) {
                 skip = true;
                 break;
             }
         }
 
         if (!skip) {
-            picked.push_back(neighbors[i]);
-        } else if (save_remains_) {
-            skipped.push(cur_dist, neighbors[i].GetNode());
+            picked.push_back(*it);
+            if (nn_selected) {
+                // nearest neighbors included in result & picked by the heuristic algorithm
+                ++nn_picked_num;
+            }
+        } else if (!nn_selected && save_remains_) {
+            skipped.push(cur_dist, cur_node);
         }
             
-        if (picked.size() == m) break;
+        if (picked.size() - nn_picked_num == m - nn_num)
+            // check if # of neighbors exclusively picked by the heuristic algorithm equals m - nn_num
+            break;
     }
-        
-    for(size_t i = 0; i < picked.size(); ++i) {
+
+    for (size_t i = nn_picked_num; i < picked.size(); ++i) {
         result.emplace(picked[i]);
     }
-        
+
     if (save_remains_) {
         while (result.size() < m && skipped.size()) {
             result.emplace(skipped.top().data, skipped.top().key);
             skipped.pop();
         }
-    }    
+    }   
 }
+
+template class HeuristicNeighborSelectingPolicies<AngularDistance>;
+template class HeuristicNeighborSelectingPolicies<L2Distance>;
+template class HeuristicNeighborSelectingPolicies<DotDistance>;
 
 } // namespace n2

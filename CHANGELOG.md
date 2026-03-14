@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.5] - 2026-March-13
+* Try to update the N2 source code, last commit 20b02de8bdcf808312232dd4784c2902476063da
+June 28 2023, PR #52 from 
+
 ## [1.0.4] - 2026-March-05
 * Reformat the arXiv DOI for CRAN
 * Remove 'Rcpp:::LdFlags()' as no longer needed based on CRAN 

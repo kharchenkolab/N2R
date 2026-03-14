@@ -21,7 +21,11 @@ using std::chrono::high_resolution_clock;
 #define INDEX_TYPE_COSINE 2
 #define INDEX_TYPE_LP 3
 
+
+//[[Rcpp::depends(RcppEigen)]]
+
 #include <RcppEigen.h>
+
 
 #include "n2/hnsw.h"   // <RcppSpdlog> included here
 
@@ -134,3 +138,6 @@ Eigen::SparseMatrix<double> n2CrossKnn(const Rcpp::NumericMatrix& mA, const Rcpp
   mat.setFromTriplets(tripletList.begin(),tripletList.end());
   return(mat);
 };
+
+
+

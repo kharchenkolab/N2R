@@ -14,27 +14,20 @@
 
 #pragma once
 
-#include <unistd.h>
+
+// [[Rcpp::depends(BH)]]
+
+#include <boost/heap/d_ary_heap.hpp>   // cf https://github.com/eddelbuettel/bh
+
 
 namespace n2 {
 
-class Mmap {
-public:
-    explicit Mmap(char const* fname);
-    ~Mmap();
-    void Map(char const* fname);
-    void UnMap();
-    size_t QueryFileSize() const;
-    
-    inline char* GetData() const { return data_; }
-    inline bool IsOpen() const { return file_handle_ != -1; }
-    inline int GetFileHandle() const { return file_handle_; }
-    inline size_t GetFileSize() const { return file_size_; }
-
-private:
-    char* data_ = nullptr;
-    size_t file_size_ = 0;
-    int file_handle_ = -1;
+typedef typename std::pair<int, float> IdDistancePair;
+struct IdDistancePairMaxHeapComparer {
+	bool operator()(const IdDistancePair& p1, const IdDistancePair& p2) const {
+        return p1.second < p2.second;
+    }
 };
+typedef typename boost::heap::d_ary_heap<float, boost::heap::arity<4>> DistanceMaxHeap;
 
 } // namespace n2
