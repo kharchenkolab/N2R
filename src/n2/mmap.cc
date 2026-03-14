@@ -18,6 +18,7 @@
 
 // https://stackoverflow.com/questions/25280440/why-include-direct-h-or-sys-stat-h-conditionally-based-on-win32-or-linux
 #if defined(_WIN32) || defined(_WIN64)
+    #include <windows.h>
     #include <memoryapi.h>
 #else
     #include <sys/mman.h>
@@ -52,20 +53,28 @@ void Mmap::Map(char const* fname) {
     #if defined(_WIN32) || defined(_WIN64)
         // https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualalloc
         data_ = static_cast<char*>(VirtualAlloc(0, file_size_, MEM_COMMIT | MEM_RESERVE, PAGE_READONLY));
-        if (data_ == ERROR_INVALID_ADDRESS) throw std::runtime_error("[Error] Memory mapping failed!");
+        // https://learn.microsoft.com/en-us/windows/win32/debug/system-error-codes--0-499-
+        if (data_ == 487) throw std::runtime_error("[Error] Memory mapping failed!");
     #else
         // https://man7.org/linux/man-pages/man2/mmap.2.html
-        // https://www.cs.uaf.edu/2017/fall/cs301/lecture/11_20_mmap.html
+        // ERROR_INVALID_ADDRESS --- 487, https://www.cs.uaf.edu/2017/fall/cs301/lecture/11_20_mmap.html
         data_ = static_cast<char*>(mmap(0, file_size_, PROT_READ, MAP_SHARED, file_handle_, 0));
         if (data_ == MAP_FAILED) throw std::runtime_error("[Error] Memory mapping failed!");
     #endif
 }
 
 void Mmap::UnMap() {
-    if (data_ != nullptr) {
-        int ret = munmap(static_cast<void*>(data_), file_size_);
-        if (ret != 0) throw std::runtime_error("[Error] Memory unmapping failed!");
-    }
+    #if defined(_WIN32) || defined(_WIN64)
+        if (data_ != nullptr) {
+            int ret = VirtualFree(static_cast<void*>(data_), file_size_, MEM_RELEASE);
+            if (ret != 0) throw std::runtime_error("[Error] Memory unmapping failed!");
+        }
+    #else
+        if (data_ != nullptr) {
+            int ret = munmap(static_cast<void*>(data_), file_size_);
+            if (ret != 0) throw std::runtime_error("[Error] Memory unmapping failed!");
+        }
+    #endif
     data_ = nullptr;
     file_size_ = 0;
     if (file_handle_ != -1) {
@@ -91,4 +100,4 @@ size_t Mmap::QueryFileSize() const {
     #endif
 }
 
-}
+
