@@ -49,7 +49,6 @@ void Mmap::Map(char const* fname) {
     if (file_handle_ == -1) throw std::runtime_error("[Error] Failed to read file: " + std::string(fname));
     file_size_ = QueryFileSize();
     if (file_size_ <= 0) throw std::runtime_error("[Error] Memory mapping failed! (file_size==zero)");
-    if (data_ == ...)
     #if defined(_WIN32) || defined(_WIN64)
         // https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualalloc
         data_ = static_cast<char*>(VirtualAlloc(0, file_size_, MEM_COMMIT | MEM_RESERVE, PAGE_READONLY));
@@ -78,13 +77,13 @@ void Mmap::UnMap() {
 size_t Mmap::QueryFileSize() const {
     struct stat sbuf;
     #if defined(_WIN32) || defined(_WIN64)
-        if (fstat(file_handle_, &sbuf) == -1) {
+        if (_fstat(file_handle_, &sbuf) == -1) {
             return 0;
         } else {
             return (size_t)sbuf.st_size;
         }
     #else
-        if (_fstat(file_handle_, &sbuf) == -1) {
+        if (fstat(file_handle_, &sbuf) == -1) {
             return 0;
         } else {
             return (size_t)sbuf.st_size;
