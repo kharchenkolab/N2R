@@ -15,8 +15,14 @@
 #include "n2/mmap.h"
 
 #include <fcntl.h>
-#include <sys/mman.h>
-#include <sys/stat.h>
+
+// https://stackoverflow.com/questions/25280440/why-include-direct-h-or-sys-stat-h-conditionally-based-on-win32-or-linux
+#if defined(_WIN32) || defined(_WIN64)
+    #include <direct.h>
+#else
+    #include <sys/mman.h>
+    #include <sys/stat.h> // fstat() for Linux, _fstat() for Windows
+#endif
 
 #include <iostream>
 #include <stdexcept>
@@ -43,8 +49,17 @@ void Mmap::Map(char const* fname) {
     if (file_handle_ == -1) throw std::runtime_error("[Error] Failed to read file: " + std::string(fname));
     file_size_ = QueryFileSize();
     if (file_size_ <= 0) throw std::runtime_error("[Error] Memory mapping failed! (file_size==zero)");
-    data_ = static_cast<char*>(mmap(0, file_size_, PROT_READ, MAP_SHARED, file_handle_, 0));
-    if (data_ == MAP_FAILED) throw std::runtime_error("[Error] Memory mapping failed!");
+    if (data_ == ...)
+    #if defined(_WIN32) || defined(_WIN64)
+        // https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualalloc
+        data_ = static_cast<char*>(VirtualAlloc(0, file_size_, MEM_COMMIT | MEM_RESERVE, PAGE_READONLY));
+        if (data_ == ERROR_INVALID_ADDRESS) throw std::runtime_error("[Error] Memory mapping failed!");
+    #else
+        // https://man7.org/linux/man-pages/man2/mmap.2.html
+        // https://www.cs.uaf.edu/2017/fall/cs301/lecture/11_20_mmap.html
+        data_ = static_cast<char*>(mmap(0, file_size_, PROT_READ, MAP_SHARED, file_handle_, 0));
+        if (data_ == MAP_FAILED) throw std::runtime_error("[Error] Memory mapping failed!");
+    #endif
 }
 
 void Mmap::UnMap() {
@@ -62,11 +77,19 @@ void Mmap::UnMap() {
 
 size_t Mmap::QueryFileSize() const {
     struct stat sbuf;
-    if (fstat(file_handle_, &sbuf) == -1) {
-        return 0;
-    } else {
-        return (size_t)sbuf.st_size;
-    }
+    #if defined(_WIN32) || defined(_WIN64)
+        if (fstat(file_handle_, &sbuf) == -1) {
+            return 0;
+        } else {
+            return (size_t)sbuf.st_size;
+        }
+    #else
+        if (_fstat(file_handle_, &sbuf) == -1) {
+            return 0;
+        } else {
+            return (size_t)sbuf.st_size;
+        }
+    #endif
 }
 
 }
