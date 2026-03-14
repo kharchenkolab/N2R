@@ -18,7 +18,7 @@
 
 // https://stackoverflow.com/questions/25280440/why-include-direct-h-or-sys-stat-h-conditionally-based-on-win32-or-linux
 #if defined(_WIN32) || defined(_WIN64)
-    #include <direct.h>
+    #include <memoryapi.h>
 #else
     #include <sys/mman.h>
     #include <sys/stat.h> // fstat() for Linux, _fstat() for Windows
