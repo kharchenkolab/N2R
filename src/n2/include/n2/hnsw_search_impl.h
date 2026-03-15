@@ -24,6 +24,7 @@
 #include "min_heap.h"
 #include "visited_list.h"
 
+
 namespace n2 {
 
 template<typename DistFuncType>

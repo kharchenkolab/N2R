@@ -15,18 +15,9 @@
 #include "n2/heuristic.h"
 
 
-//#if defined(__x86_64__) || defined(__i386__)
-//#include <xmmintrin.h>
-//#endif
-
 #include <vector>
 
 #include "n2/min_heap.h"
-
-#define _MM_HINT_T0 1
-#define _MM_HINT_T1 2
-#define _MM_HINT_T2 3
-#define _MM_HINT_NTA 0
 
 
 namespace n2 {

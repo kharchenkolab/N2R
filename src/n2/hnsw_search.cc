@@ -14,14 +14,10 @@
 
 #include "n2/hnsw_search_impl.h"
 
-#if defined(__x86_64__) || defined(__i386__)
-#include <xmmintrin.h>
-#endif
-
-
 #include "n2/max_heap.h"
 #include "n2/min_heap.h"
 #include "n2/utils.h"
+
 
 namespace n2 {
 

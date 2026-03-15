@@ -1,8 +1,12 @@
 # Changelog
 
-## [1.0.5] - 2026-March-13
-* Try to update the N2 source code, last commit 20b02de8bdcf808312232dd4784c2902476063da
+## [1.0.5] - 2026-March-15
+* Try to update the n2 C++ source code, last commit 20b02de8bdcf808312232dd4784c2902476063da
 June 28 2023, PR #52 from 
+* Guard headers with conditionals for Linux/Mac and Windows, i.e. former and latters uses VirtualAlloc() and VirtualFree(), and the 
+* Remove `std::bind1st()`` from /include/n2/utils.h, use lambda instead 
+* Replace `_mm_prefetch()` as xmmintrin.h header doesn't work on ARM64; use `__builtin_prefetch()` instead
+
 
 ## [1.0.4] - 2026-March-05
 * Reformat the arXiv DOI for CRAN

@@ -22,6 +22,7 @@ using std::string;
 using std::to_string;
 using std::vector;
 
+
 Hnsw::Hnsw() : Hnsw(0) {}
 
 Hnsw::Hnsw(int dim, string metric) : data_dim_(dim) {
@@ -41,7 +42,7 @@ Hnsw::Hnsw(const Hnsw& other) {
 }
 
 Hnsw::Hnsw(Hnsw&& other) noexcept {
-    *this = move(other);
+    *this = std::move(other);
 }
 
 Hnsw& Hnsw::operator=(const Hnsw& other) {
@@ -57,9 +58,9 @@ Hnsw& Hnsw::operator=(const Hnsw& other) {
 
 Hnsw& Hnsw::operator=(Hnsw&& other) noexcept {
     if (this != &other) {
-        model_ = move(other.model_);
-        searcher_ = move(other.searcher_);
-        searcher_pool_ = move(other.searcher_pool_);
+        model_ = std::move(other.model_);
+        searcher_ = std::move(other.searcher_);
+        searcher_pool_ = std::move(other.searcher_pool_);
         data_dim_ = other.data_dim_;
         metric_ = other.metric_;
         ensure_k_ = other.ensure_k_;

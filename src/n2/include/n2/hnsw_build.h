@@ -16,7 +16,7 @@
 #include <memory>
 #include <queue>
 
-// #include "spdlog/spdlog.h"
+// #include "spdlog/spdlog.h" -- simply removed logging for 1.0.5
 
 //#include <RcppSpdlog>
 
