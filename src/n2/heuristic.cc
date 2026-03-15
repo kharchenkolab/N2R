@@ -14,11 +14,20 @@
 
 #include "n2/heuristic.h"
 
-#include <xmmintrin.h>
+
+//#if defined(__x86_64__) || defined(__i386__)
+//#include <xmmintrin.h>
+//#endif
 
 #include <vector>
 
 #include "n2/min_heap.h"
+
+#define _MM_HINT_T0 1
+#define _MM_HINT_T1 2
+#define _MM_HINT_T2 3
+#define _MM_HINT_NTA 0
+
 
 namespace n2 {
 
@@ -57,7 +66,7 @@ void HeuristicNeighborSelectingPolicies<DistFuncType>::Select(size_t m, size_t d
     for (auto it = neighbors.rbegin(); it != neighbors.rend(); it++) {
         float cur_dist = it->GetDistance();
         HnswNode* cur_node = it->GetNode();
-        _mm_prefetch(cur_node->GetData(), _MM_HINT_T0);
+        __builtin_prefetch(cur_node->GetData(), 0);
         bool nn_selected = false;
         if (result.size() < nn_num) {
             result.emplace(*it);
@@ -67,9 +76,9 @@ void HeuristicNeighborSelectingPolicies<DistFuncType>::Select(size_t m, size_t d
         bool skip = false;
         for (size_t j = 0; j < picked.size(); ++j) {
             if (j < picked.size() - 1) {
-                _mm_prefetch(picked[j+1].GetNode()->GetData(), _MM_HINT_T0);
+                __builtin_prefetch(picked[j+1].GetNode()->GetData(), 0);
             }
-            _mm_prefetch(cur_node->GetData(), _MM_HINT_T1);
+            __builtin_prefetch(cur_node->GetData(), 0);
             if (dist_func_(cur_node, picked[j].GetNode(), dim) < cur_dist) {
                 skip = true;
                 break;

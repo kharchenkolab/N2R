@@ -26,7 +26,7 @@ public:
         float sum = std::inner_product(in.begin(), in.end(), in.begin(), 0.0);
         if (sum != 0.0) {
             sum = 1 / std::sqrt(sum);
-            std::transform(in.begin(), in.end(), out.begin(), std::bind(std::multiplies<float>(), sum));
+            std::transform(in.begin(), in.end(), out.begin(), std::bind1st(std::multiplies<float>(), sum));
         }
     }
 };

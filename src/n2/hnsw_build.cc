@@ -55,7 +55,6 @@
 #include "n2/utils.h"
 
 
-
 namespace n2 {
 
 using std::defer_lock;
@@ -317,7 +316,7 @@ void HnswBuildImpl<DistFuncType>::InsertNode(HnswNode* qnode, VisitedList* visit
                 unique_lock<mutex> local_lock(cur_node->GetAccessGuard());
                 const vector<HnswNode*>& neighbors = cur_node->GetFriends(i);
                 for (auto iter = neighbors.begin(); iter != neighbors.end(); ++iter) {
-                    _mm_prefetch((*iter)->GetData(), _MM_HINT_T0);
+                    __builtin_prefetch((*iter)->GetData(), 0);
                 }
                 for (auto iter = neighbors.begin(); iter != neighbors.end(); ++iter) {
                     d = dist_func_(qnode, *iter, data_dim_);
@@ -334,7 +333,7 @@ void HnswBuildImpl<DistFuncType>::InsertNode(HnswNode* qnode, VisitedList* visit
         enterpoints.push_back(enterpoint_);
     }
     
-    _mm_prefetch(&selecting_policy_, _MM_HINT_T0);
+    __builtin_prefetch(&selecting_policy_, 0);
     for (auto i = min(max_level_copy, cur_level); i >= 0; --i) {
         priority_queue<FurtherFirst> result;
         SearchAtLayer(qnode, enterpoints, i, visited_list, result);
@@ -386,12 +385,12 @@ void HnswBuildImpl<DistFuncType>::SearchAtLayer(HnswNode* qnode, const vector<Hn
         const vector<HnswNode*>& neighbors = candidate_node->GetFriends(level);
         candidates.pop();
         for (const auto& neighbor : neighbors) {
-            _mm_prefetch(neighbor->GetData(), _MM_HINT_T0);
+            __builtin_prefetch(neighbor->GetData(), 0);
         }
         for (const auto& neighbor : neighbors) {
             int id = neighbor->GetId();
             if (visited_list->NotVisited(id)) {
-                _mm_prefetch(neighbor->GetData(), _MM_HINT_T0);
+                __builtin_prefetch(neighbor->GetData(), 0);
                 visited_list->MarkAsVisited(id);
                 float d = dist_func_(qnode, neighbor, data_dim_);
                 if (result.size() < ef_construction_ || result.top().GetDistance() > d) {
@@ -427,7 +426,7 @@ void HnswBuildImpl<DistFuncType>::Link(HnswNode* source, HnswNode* target, int l
     } else {
         priority_queue<FurtherFirst> tempres;
         for (const auto& neighbor : neighbors) {
-            _mm_prefetch(neighbor->GetData(), _MM_HINT_T0);
+            __builtin_prefetch(neighbor->GetData(), 0);
         }
 
         for (const auto& neighbor : neighbors) {
