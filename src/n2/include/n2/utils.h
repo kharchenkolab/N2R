@@ -26,7 +26,11 @@ public:
         float sum = std::inner_product(in.begin(), in.end(), in.begin(), 0.0);
         if (sum != 0.0) {
             sum = 1 / std::sqrt(sum);
-            std::transform(in.begin(), in.end(), out.begin(), std::bind1st(std::multiplies<float>(), sum));
+            //std::transform(in.begin(), in.end(), out.begin(), std::bind1st(std::multiplies<float>(), sum));
+            // problem (1) std::bind1st deprecated
+            // problem (2) std::bind leads to type issues which I don't want to untangle
+            std::transform(in.begin(), in.end(), out.begin(), [sum](float in){ return in * sum;});
+
         }
     }
 };
