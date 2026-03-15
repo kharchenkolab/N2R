@@ -22,12 +22,12 @@
     #include <memoryapi.h>
 #else
     #include <sys/mman.h>
-    #include <sys/stat.h> // fstat() for Linux, _fstat() for Windows
 #endif
 
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <sys/stat.h> // fstat() for Linux, fstat() for Windows
 
 namespace n2 {
 
@@ -54,10 +54,11 @@ void Mmap::Map(char const* fname) {
         // https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualalloc
         data_ = static_cast<char*>(VirtualAlloc(0, file_size_, MEM_COMMIT | MEM_RESERVE, PAGE_READONLY));
         // https://learn.microsoft.com/en-us/windows/win32/debug/system-error-codes--0-499-
-        if (data_ == 487) throw std::runtime_error("[Error] Memory mapping failed!");
+        // If the function fails, the return value is NULL. ,
+        if (data_ == NULL) throw std::runtime_error("[Error] Memory mapping failed!");
     #else
         // https://man7.org/linux/man-pages/man2/mmap.2.html
-        // ERROR_INVALID_ADDRESS --- 487, https://www.cs.uaf.edu/2017/fall/cs301/lecture/11_20_mmap.html
+        // https://www.cs.uaf.edu/2017/fall/cs301/lecture/11_20_mmap.html
         data_ = static_cast<char*>(mmap(0, file_size_, PROT_READ, MAP_SHARED, file_handle_, 0));
         if (data_ == MAP_FAILED) throw std::runtime_error("[Error] Memory mapping failed!");
     #endif
@@ -84,20 +85,12 @@ void Mmap::UnMap() {
 }
 
 size_t Mmap::QueryFileSize() const {
-    struct stat sbuf;
-    #if defined(_WIN32) || defined(_WIN64)
-        if (_fstat(file_handle_, &sbuf) == -1) {
-            return 0;
-        } else {
-            return (size_t)sbuf.st_size;
-        }
-    #else
-        if (fstat(file_handle_, &sbuf) == -1) {
-            return 0;
-        } else {
-            return (size_t)sbuf.st_size;
-        }
-    #endif
+    struct stat sbuf; 
+    if (fstat(file_handle_, &sbuf) == -1) {
+        return 0;
+    } else {
+        return (size_t)sbuf.st_size;
+    }
 }
 
 }
