@@ -100,4 +100,4 @@ size_t Mmap::QueryFileSize() const {
     #endif
 }
 
-
+}
