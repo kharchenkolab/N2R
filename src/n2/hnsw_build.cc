@@ -184,7 +184,7 @@ shared_ptr<const HnswModel> HnswBuild::Build() {
     nodes_.clear();
     data_list_.clear();
 
-    return move(model);
+    return std::move(model);
 }
 
 void HnswBuild::BuildGraph(bool reverse) {
@@ -233,7 +233,7 @@ int HnswBuild::GetRandomNodeLevel() {
 
 int HnswBuild::GetRandomSeedPerThread() {
     //int tid = omp_get_thread_num();
-    int tid = 42;
+    int tid = 1;
     int g_seed = 17;
     for (int i = 0; i <= tid; ++i)
         g_seed = 214013 * g_seed + 2531011;
