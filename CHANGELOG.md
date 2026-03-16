@@ -8,6 +8,7 @@ June 28 2023, PR #52 from
 * Replace `_mm_prefetch()` as xmmintrin.h header doesn't work on ARM64; use `__builtin_prefetch()` instead
 * Fix "unqualified call" warning, use `std::move()`
 * Explicitly set `int tid = 1;` instead of `int tid = omp_get_thread_num();`
+* To fix gcc-UBSan error, remove data type in chevrons for `SetValueAndIncPtr()`
 
 
 ## [1.0.4] - 2026-March-05
