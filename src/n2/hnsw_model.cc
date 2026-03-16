@@ -44,6 +44,7 @@ HnswModel::HnswModel(const vector<HnswNode*> nodes, int enterpoint_id, int max_m
                      int max_level, size_t data_dim)
         : enterpoint_id_(enterpoint_id), max_level_(max_level), data_dim_(data_dim), metric_(metric) {
 
+
     uint64_t total_level = 0;
     for (const auto& node : nodes) {
         total_level += node->GetLevel();
@@ -169,11 +170,17 @@ void HnswModel::SaveConfigToModel() {
     ptr = SetValueAndIncPtr<int>(ptr, num_nodes_);
     ptr = SetValueAndIncPtr<DistanceKind>(ptr, metric_);
     ptr = SetValueAndIncPtr<size_t>(ptr, data_dim_);
-    ptr = SetValueAndIncPtr<uint64_t>(ptr, memory_per_data_);
-    ptr = SetValueAndIncPtr<uint64_t>(ptr, memory_per_link_level0_);
-    ptr = SetValueAndIncPtr<uint64_t>(ptr, memory_per_node_level0_);
-    ptr = SetValueAndIncPtr<uint64_t>(ptr, memory_per_node_higher_level_);
+    // gcc-UBSan issues
+    //ptr = SetValueAndIncPtr<uint64_t>(ptr, memory_per_data_);
+    //ptr = SetValueAndIncPtr<uint64_t>(ptr, memory_per_link_level0_);
+    //ptr = SetValueAndIncPtr<uint64_t>(ptr, memory_per_node_level0_);
+    //ptr = SetValueAndIncPtr<uint64_t>(ptr, memory_per_node_higher_level_);
+    ptr = SetValueAndIncPtr(ptr, memory_per_data_);
+    ptr = SetValueAndIncPtr(ptr, memory_per_link_level0_);
+    ptr = SetValueAndIncPtr(ptr, memory_per_node_level0_);
+    ptr = SetValueAndIncPtr(ptr, memory_per_node_higher_level_);
 }
+
 
 void HnswModel::LoadConfigFromModel() {
     char* ptr = model_;
