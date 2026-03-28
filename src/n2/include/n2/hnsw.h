@@ -114,13 +114,14 @@ private:
     void SaveModelConfig(char* model);
     template <typename T>
     char* SetValueAndIncPtr(char* ptr, const T& val) {
-        *((T*)(ptr)) = val;
-        return ptr + sizeof(T);
+      std::memcpy(ptr, &val, sizeof(T));
+      return ptr + sizeof(T);
     }
+    
     template <typename T>
     char* GetValueAndIncPtr(char* ptr, T& val) {
-        val = *((T*)(ptr));
-        return ptr + sizeof(T);
+      std::memcpy(&val, ptr, sizeof(T));
+      return ptr + sizeof(T);
     }
 
 private:
