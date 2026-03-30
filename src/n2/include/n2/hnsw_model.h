@@ -16,6 +16,7 @@
 
 #include <memory>
 #include <string>
+#include <cstring> // memcpy
 
 #include "common.h"
 
@@ -23,7 +24,7 @@
 #include "mmap.h"
 
 namespace n2 {
-
+ 
 class HnswModel {
 public:
     static std::shared_ptr<const HnswModel> GenerateModel(const std::vector<HnswNode*> nodes, int enterpoint_id, 
@@ -64,17 +65,19 @@ private:
     void SaveConfigToModel();
     void LoadConfigFromModel();
 
+    // fixes for CRAN gcc-UBSAN
     template <typename T>
     char* SetValueAndIncPtr(char* ptr, const T& val) {
-        *((T*)(ptr)) = val;
-        return ptr + sizeof(T);
+      std::memcpy(ptr, &val, sizeof(T));
+      return ptr + sizeof(T);
     }
+    
     template <typename T>
     char* GetValueAndIncPtr(char* ptr, T& val) {
-        val = *((T*)(ptr));
-        return ptr + sizeof(T);
+      std::memcpy(&val, ptr, sizeof(T));
+      return ptr + sizeof(T);
     }
-
+    
 public:
     int enterpoint_id_;
     int num_nodes_;

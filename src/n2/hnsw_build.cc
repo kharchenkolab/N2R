@@ -202,8 +202,9 @@ int HnswBuild::GetRandomNodeLevel() {
     static thread_local uniform_real_distribution<double> uniform_distribution(0.0, 1.0);
     double r = uniform_distribution(rng);
 
-    if (r < numeric_limits<double>::epsilon())
+    if (r < numeric_limits<double>::epsilon()){
         r = 1.0;
+    }
     return (int)(-log(r) * level_mult_);
 }
 
@@ -212,9 +213,10 @@ int HnswBuild::GetRandomNodeLevel() {
 int HnswBuild::GetRandomSeedPerThread() {
     //int tid = omp_get_thread_num();
     int tid = 1;
-    int g_seed = 17;
-    for (int i = 0; i <= tid; ++i)
+    long long int g_seed = 17;
+    for (int i = 0; i <= tid; ++i){
         g_seed = 214013 * g_seed + 2531011;
+    }
     return (g_seed >> 16) & 0x7FFF;
 }
 
