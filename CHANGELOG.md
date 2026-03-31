@@ -7,9 +7,8 @@ June 28 2023, PR #52 from
 * Guard headers with conditionals for Linux/Mac and Windows, i.e. former and latters uses VirtualAlloc() and VirtualFree(), and the 
 * Remove `std::bind1st()`` from /include/n2/utils.h, use lambda instead 
 * Replace `_mm_prefetch()` as xmmintrin.h header doesn't work on ARM64; use `__builtin_prefetch()` instead
-* Fix "unqualified call" warning, use `std::move()`
+* Fix "unqualified call" warning, use `std::move()` instead of `move()`
 * Explicitly set `int tid = 1;` instead of `int tid = omp_get_thread_num();`
-* To fix gcc-UBSan error, remove data type in chevrons for `SetValueAndIncPtr()`
 
 
 ## [1.0.4] - 2026-March-05

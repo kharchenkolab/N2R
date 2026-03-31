@@ -57,7 +57,9 @@ void HeuristicNeighborSelectingPolicies<DistFuncType>::Select(size_t m, size_t d
     for (auto it = neighbors.rbegin(); it != neighbors.rend(); it++) {
         float cur_dist = it->GetDistance();
         HnswNode* cur_node = it->GetNode();
-        __builtin_prefetch(cur_node->GetData(), 0);
+        // Replace `_mm_prefetch()` calls below as xmmintrin.h header doesn't work on ARM64
+        // _mm_prefetch(cur_node->GetData(), _MM_HINT_T0); 
+        __builtin_prefetch(cur_node->GetData(), 0); 
         bool nn_selected = false;
         if (result.size() < nn_num) {
             result.emplace(*it);
