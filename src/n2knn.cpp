@@ -64,19 +64,34 @@ Eigen::SparseMatrix<double> n2Knn(const Rcpp::NumericMatrix& m, int64_t k, int64
 
   if(verbose) Rcpp::Rcout<<"querying ... "<<std::flush;
 
-  //#pragma omp parallel for num_threads(nThreads) shared(index,ansloc,ansdist,m,ef_search,nanswers)
   std::vector<T> tripletList;
   tripletList.reserve(nanswers);
 
-  for(int64_t i=0;i<m.nrow();i++) {
-    std::vector<std::pair<int, float> > result;
-    index.SearchById(i, k, ef_search, result);
-    int64_t nr=result.size();
-    if(nr>k) nr=k;
-    for(int64_t j=0;j<nr;j++) {
-      //int64_t l=i*k+j;
-      //cout<<"i="<<i<<"; j="<<j<<"; n="<<result[j].first<<"; d="<<result[j].second<<endl;
-      tripletList.push_back(T(result[j].first,i,result[j].second));
+  if(nThreads > 1) {
+    // Thread-safe parallel query via n2's searcher pool (one HnswSearch -- hence one visited_list --
+    // per thread). The single-searcher SearchById below shares one visited_list and is NOT safe to call
+    // concurrently (doing so corrupts results), which is why the manual omp loop was disabled.
+    std::vector<int> ids(m.nrow());
+    for(int64_t i=0;i<m.nrow();i++) ids[i]=(int)i;
+    std::vector<std::vector<std::pair<int, float> > > results;
+    index.BatchSearchByIds(ids, k, ef_search, nThreads, results);
+    for(int64_t i=0;i<(int64_t)results.size();i++) {
+      int64_t nr=results[i].size();
+      if(nr>k) nr=k;
+      for(int64_t j=0;j<nr;j++) {
+        tripletList.push_back(T(results[i][j].first,i,results[i][j].second));
+      }
+    }
+  } else {
+    // Serial path: no OpenMP region, byte-identical and fork/mclapply-safe.
+    for(int64_t i=0;i<m.nrow();i++) {
+      std::vector<std::pair<int, float> > result;
+      index.SearchById(i, k, ef_search, result);
+      int64_t nr=result.size();
+      if(nr>k) nr=k;
+      for(int64_t j=0;j<nr;j++) {
+        tripletList.push_back(T(result[j].first,i,result[j].second));
+      }
     }
   }
   if(verbose) Rcpp::Rcout<<"done"<<std::endl;
@@ -121,16 +136,34 @@ Eigen::SparseMatrix<double> n2CrossKnn(const Rcpp::NumericMatrix& mA, const Rcpp
 
   if(verbose) Rcpp::Rcout<<"querying ... "<<std::flush;
 
-  for(int64_t i=0;i<mA.nrow();i++) {
-    Rcpp::NumericVector nv = mA.row(i);
-    std::vector<float> v(nv.begin(),nv.end());
-    std::vector<std::pair<int, float> > result;
-    index.SearchByVector(v, k, ef_search, result);
-    int64_t nr=result.size();
-    if(nr>k) nr=k;
-    for(int64_t j=0;j<nr;j++) {
-      //int64_t l=i*k+j;
-      tripletList.push_back(T(result[j].first,i,result[j].second));
+  if(nThreads > 1) {
+    // Pre-extract query rows (Rcpp/R-API access is not thread-safe), then thread-safe parallel query via
+    // n2's searcher pool (one visited_list per thread).
+    std::vector<std::vector<float> > qvecs(mA.nrow());
+    for(int64_t i=0;i<mA.nrow();i++) {
+      Rcpp::NumericVector nv = mA.row(i);
+      qvecs[i].assign(nv.begin(), nv.end());
+    }
+    std::vector<std::vector<std::pair<int, float> > > results;
+    index.BatchSearchByVectors(qvecs, k, ef_search, nThreads, results);
+    for(int64_t i=0;i<(int64_t)results.size();i++) {
+      int64_t nr=results[i].size();
+      if(nr>k) nr=k;
+      for(int64_t j=0;j<nr;j++) {
+        tripletList.push_back(T(results[i][j].first,i,results[i][j].second));
+      }
+    }
+  } else {
+    for(int64_t i=0;i<mA.nrow();i++) {
+      Rcpp::NumericVector nv = mA.row(i);
+      std::vector<float> v(nv.begin(),nv.end());
+      std::vector<std::pair<int, float> > result;
+      index.SearchByVector(v, k, ef_search, result);
+      int64_t nr=result.size();
+      if(nr>k) nr=k;
+      for(int64_t j=0;j<nr;j++) {
+        tripletList.push_back(T(result[j].first,i,result[j].second));
+      }
     }
   }
   if(verbose) Rcpp::Rcout<<"done"<<std::endl;
